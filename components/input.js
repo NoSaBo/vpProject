@@ -1,11 +1,10 @@
 // @flow
-import React from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View, TextInput } from "react-native";
 
-import styles from '../style'
+import styles from "../style";
 
 export default class Input extends React.Component {
-
   render() {
     return (
       <TextInput
