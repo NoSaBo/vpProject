@@ -4,7 +4,13 @@ import { StyleSheet, Text, View, TextInput } from "react-native";
 
 import styles from "../style";
 
-export default class Input extends React.Component {
+type Props = {
+  placeholder: string,
+  secure: boolean,
+  handleInput: string => void
+};
+
+export default class Input extends React.Component<Props> {
   render() {
     return (
       <TextInput

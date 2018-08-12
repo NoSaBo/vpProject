@@ -1,4 +1,4 @@
-// @flow
+/* @flow */
 import React from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 
@@ -7,8 +7,15 @@ import CustomButton from "./custom-button";
 
 import styles from "../style";
 
-export default class Login extends React.Component {
-  constructor(props) {
+type Props = {};
+
+type State = {
+  user: string,
+  password: string
+};
+
+export default class Login extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       user: "",
@@ -16,11 +23,11 @@ export default class Login extends React.Component {
     };
   }
 
-  handleUser = text => {
+  handleUser = (text: string) => {
     this.setState({ user: text });
   };
 
-  handlePassword = text => {
+  handlePassword = (text: string) => {
     this.setState({ password: text });
   };
 
