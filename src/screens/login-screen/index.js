@@ -1,11 +1,12 @@
 /* @flow */
 import React from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
+import { createSwitchNavigator } from "react-navigation";
 
-import Input from "./input";
-import CustomButton from "./custom-button";
+import Input from "./../../components/input";
+import CustomButton from "./../../components/button";
 
-import styles from "../style";
+import styles from "./styles";
 
 type Props = {};
 
@@ -14,7 +15,7 @@ type State = {
   password: string
 };
 
-export default class Login extends React.Component<Props, State> {
+export default class LoginScreen extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -31,14 +32,18 @@ export default class Login extends React.Component<Props, State> {
     this.setState({ password: text });
   };
 
-  handleButtonClick = () => {};
+  handleButtonClick = () => {
+    this.props.navigation.navigate("Home", {
+      user: "Jesus Rey"
+    });
+  };
 
   render() {
     return (
-      <View style={styles.login}>
+      <View style={styles.container}>
         <Image
-          style={styles.loginimage}
-          source={require("../images/logo.png")}
+          style={styles.image}
+          source={require("./../../images/logo.png")}
         />
         <Input
           placeholder={"Usuario"}
