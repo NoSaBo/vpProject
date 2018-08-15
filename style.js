@@ -1,6 +1,4 @@
-/**
- * base styles sheet
- */
+/* @flow */
 
 import { StyleSheet } from "react-native";
 
