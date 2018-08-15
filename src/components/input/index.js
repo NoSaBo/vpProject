@@ -2,7 +2,7 @@
 import React from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 
-import styles from "../style";
+import styles from "./styles";
 
 type Props = {
   placeholder: string,

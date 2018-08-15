@@ -2,7 +2,7 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
-import styles from "../style";
+import styles from "./styles";
 
 type Props = {
   title: string,
@@ -12,11 +12,8 @@ type Props = {
 export default class CustomButton extends React.Component<Props> {
   render() {
     return (
-      <TouchableOpacity
-        style={styles.custombutton}
-        onPress={this.props.onClick}
-      >
-        <Text style={styles.buttontext}>{this.props.title}</Text>
+      <TouchableOpacity style={styles.button} onPress={this.props.onClick}>
+        <Text style={styles.text}>{this.props.title}</Text>
       </TouchableOpacity>
     );
   }
