@@ -8,11 +8,12 @@ import CustomButton from "./../../components/button";
 
 import styles from "./styles";
 
+
 type Props = {};
 
 type State = {
   user: string,
-  password: string
+  password: string,
 };
 
 export default class LoginScreen extends React.Component<Props, State> {
@@ -34,7 +35,7 @@ export default class LoginScreen extends React.Component<Props, State> {
 
   handleButtonClick = () => {
     this.props.navigation.navigate("Home", {
-      user: "Jesus Rey"
+      user: "Jesus Rey",
     });
   };
 

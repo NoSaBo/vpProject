@@ -9,8 +9,9 @@ import AccordionList from "./../../components/accordion-list";
 
 import styles from "./styles";
 
+
 type Props = {
-  user: string
+  user: string,
 };
 
 type State = {};
@@ -21,6 +22,12 @@ export default class HomeScreen extends React.Component<Props, State> {
     this.state = {};
   }
 
+  static navigationOptions = ({navigation}) => {
+    return {
+      title: "Bienvenido: " + `${navigation.state.params.user}`,
+    }
+  }
+
   handleLogout = () => {
     this.props.navigation.navigate("Login");
   };
@@ -29,9 +36,9 @@ export default class HomeScreen extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <ScrollView>
-          <View>
+          {/* <View>
             <Text style={styles.welcome}> Bienvenido {this.props.user} </Text>
-          </View>
+          </View> */}
           <View>
             <CustomButton title="Cerrar Sesión" onClick={this.handleLogout} />
           </View>
