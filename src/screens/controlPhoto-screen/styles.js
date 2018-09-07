@@ -1,3 +1,5 @@
+/* @flow */
+
 import { StyleSheet } from 'react-native';
 import { FONT_NORMAL, COLOR_PRIMARY } from "./../../common"; 
 
