@@ -1,17 +1,12 @@
 /* @flow */
 import React from "react";
-import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
-import { createSwitchNavigator } from "react-navigation";
-
-import Input from "./../../components/input";
+import { View, ScrollView } from "react-native";
 import CustomButton from "./../../components/button";
 import AccordionList from "./../../components/accordion-list";
-
 import styles from "./styles";
 
-
 type Props = {
-  user: string,
+  user: string
 };
 
 type State = {};
@@ -22,11 +17,11 @@ export default class HomeScreen extends React.Component<Props, State> {
     this.state = {};
   }
 
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     return {
-      title: "Bienvenido: " + `${navigation.state.params.user}`,
-    }
-  }
+      title: "Bienvenido: " + `${navigation.state.params.user}`
+    };
+  };
 
   handleLogout = () => {
     this.props.navigation.navigate("Login");

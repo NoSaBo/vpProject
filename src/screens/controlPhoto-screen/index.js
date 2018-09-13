@@ -4,11 +4,7 @@ import React from "react";
 import { Text, View, Image } from "react-native";
 import styles from "./styles";
 import CustomButton from "./../../components/button";
-
-// capture image
 import ImagePicker from "react-native-image-picker";
-
-type Props = {};
 
 const photoOptions = {
   quality: 1
