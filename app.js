@@ -14,20 +14,12 @@ import { createSwitchNavigator } from "react-navigation";
 import LoginScreen from "./src/screens/login-screen/index";
 import HomeScreen from "./src/screens/home-screen/index";
 
-const RootSwitch = createSwitchNavigator(
-  {
-    Login: { screen: LoginScreen },
-    Home: { screen: HomeScreen }
-  },
-  {
-    initialRouteName: "Login"
-  }
-);
+const RootConfig = {
+  Login: { screen: LoginScreen },
+  Home: { screen: HomeScreen }
+};
+const SwitchConfig = {
+  initialRouteName: "Login"
+};
 
-type Props = {};
-
-export default class App extends Component<Props> {
-  render() {
-    return <RootSwitch />;
-  }
-}
+export default createSwitchNavigator(RootConfig, SwitchConfig);
