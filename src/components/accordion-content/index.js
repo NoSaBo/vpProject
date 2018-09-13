@@ -1,10 +1,13 @@
 /* @flow */
-import React from "react";
+import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 import CustomButton from "./../../components/button";
 
 import styles from "./styles";
+// navigation
+import { withNavigation } from 'react-navigation';
+
 
 type Props = {
   address: string,
@@ -12,8 +15,11 @@ type Props = {
   end: string
 };
 
-export default class accordionContent extends React.Component<Props> {
-  handleService = () => {};
+class accordionContent extends React.Component<Props> {
+  handleService = () => {
+    this.props.navigation.navigate('Site')
+  };
+
 
   render() {
     return (
@@ -33,3 +39,6 @@ export default class accordionContent extends React.Component<Props> {
     );
   }
 }
+
+
+export default withNavigation(accordionContent);

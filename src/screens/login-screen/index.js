@@ -1,11 +1,8 @@
 /* @flow */
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
-import { createSwitchNavigator } from "react-navigation";
-
+import { View, Image } from "react-native";
 import Input from "./../../components/input";
 import CustomButton from "./../../components/button";
-
 import styles from "./styles";
 
 type Props = {};

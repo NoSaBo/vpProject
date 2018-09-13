@@ -1,12 +1,8 @@
 /* @flow */
 import React from "react";
-import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
-import { createSwitchNavigator } from "react-navigation";
-
-import Input from "./../../components/input";
+import { View, ScrollView, Text } from "react-native";
 import CustomButton from "./../../components/button";
 import AccordionList from "./../../components/accordion-list";
-
 import styles from "./styles";
 
 type Props = {
@@ -30,7 +26,7 @@ export default class HomeScreen extends React.Component<Props, State> {
       <View style={styles.container}>
         <ScrollView>
           <View>
-            <Text style={styles.welcome}> Bienvenido {this.props.user} </Text>
+            <Text style={styles.welcome}> Bienvenido </Text>
           </View>
           <View>
             <CustomButton title="Cerrar Sesión" onClick={this.handleLogout} />
