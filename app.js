@@ -13,9 +13,9 @@ import {
 import { SwitchNavigator, StackNavigator } from "react-navigation";
 
 import LoginScreen from "./src/screens/login-screen/index";
-import HomeScreen from "./src/screens/home-screen/index"; 
+import HomeScreen from "./src/screens/home-screen/index";
 import ControlSiteScreen from "./src/screens/controlSite-screen/index";
-import ControlPhotoScreen from "./src/screens/controlPhoto-screen/index";
+import ControlPhotoScreen from "./src/screens/controlSite-screen/authentication";
 
 const ControlStack = StackNavigator({
   Home: HomeScreen,

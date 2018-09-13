@@ -5,7 +5,8 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLOR_PRIMARY,
-    alignItems: "flex-start",
+    alignItems: "center",
+    justifyContent: "center"
   },
   title: {
     fontSize: 24,
@@ -13,13 +14,11 @@ export default StyleSheet.create({
     fontFamily: FONT_NORMAL,
     padding: 5,
     marginTop: 25,
-    marginLeft: 15,
   },
   content: {
     fontSize: 30,
     fontWeight: "400",
     fontFamily: FONT_NORMAL,
-    marginLeft: 30,
   },
   user: {
     width: 250,
@@ -36,6 +35,11 @@ export default StyleSheet.create({
     marginTop: 60,
     height: 200,
     alignSelf: 'center',
-    justifyContent: 'space-between',
-  }
+    justifyContent: "space-around",
+  },
+  image: {
+    width: 150,
+    height: 150,
+    marginBottom: 15,
+  },
 });

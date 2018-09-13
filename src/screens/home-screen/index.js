@@ -1,6 +1,6 @@
 /* @flow */
 import React from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, Text } from "react-native";
 import CustomButton from "./../../components/button";
 import AccordionList from "./../../components/accordion-list";
 import styles from "./styles";
@@ -17,12 +17,6 @@ export default class HomeScreen extends React.Component<Props, State> {
     this.state = {};
   }
 
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: "Bienvenido: " + `${navigation.state.params.user}`
-    };
-  };
-
   handleLogout = () => {
     this.props.navigation.navigate("Login");
   };
@@ -31,9 +25,9 @@ export default class HomeScreen extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <ScrollView>
-          {/* <View>
-            <Text style={styles.welcome}> Bienvenido {this.props.user} </Text>
-          </View> */}
+          <View>
+            <Text style={styles.welcome}> Bienvenido </Text>
+          </View>
           <View>
             <CustomButton title="Cerrar Sesión" onClick={this.handleLogout} />
           </View>

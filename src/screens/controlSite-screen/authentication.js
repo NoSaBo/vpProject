@@ -3,7 +3,7 @@
 import React from "react";
 import { Text, View, Image } from "react-native";
 import styles from "./styles";
-import CustomButton from "./../../components/button";
+import CustomButton from "../../components/button";
 import ImagePicker from "react-native-image-picker";
 
 const photoOptions = {
@@ -15,7 +15,7 @@ export default class ControlPhotoScreen extends React.Component {
     super();
     this.state = {
       empleado: "Richard Gomez"
-    }
+    };
   }
 
   static navigationOptions = {
