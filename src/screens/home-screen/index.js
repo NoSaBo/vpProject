@@ -17,6 +17,10 @@ export default class HomeScreen extends React.Component<Props, State> {
     this.state = {};
   }
 
+  static navigationOptions = {
+    header: null
+}
+
   handleLogout = () => {
     this.props.navigation.navigate("Login");
   };

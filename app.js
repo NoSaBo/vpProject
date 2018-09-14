@@ -26,7 +26,8 @@ const ControlStack = StackNavigator({
 const RootSwitch = SwitchNavigator(
   {
     Control: ControlStack,
-    Login: { screen: LoginScreen }
+    Login: { screen: LoginScreen },
+    // Photo: {screen: ControlPhotoScreen}
   },
   {
     initialRouteName: "Login"

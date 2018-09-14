@@ -1,20 +1,18 @@
 /* @flow */
-
 import React from "react";
 import { Text, View, Image } from "react-native";
 import styles from "./styles";
 import CustomButton from "../../components/button";
-import ImagePicker from "react-native-image-picker";
 
-const photoOptions = {
-  quality: 1
-};
+var ImagePicker = require('react-native-image-picker');
+
 
 export default class ControlPhotoScreen extends React.Component {
   constructor() {
     super();
     this.state = {
-      empleado: "Richard Gomez"
+      employeeName: "Richard Gomez",
+      pickedImage: null,
     };
   }
 
@@ -22,12 +20,12 @@ export default class ControlPhotoScreen extends React.Component {
     title: "Autenticación de imagen"
   };
 
-  state = {
-    pickedImage: null
+  photoOptions = {
+    quality: 0.5
   };
 
   pickImageHandler = () => {
-    ImagePicker.launchCamera(photoOptions, res => {
+    ImagePicker.launchCamera(this.photoOptions, res => {
       if (res.didCancel) {
         console.log("User cancelled!");
       } else if (res.error) {
@@ -54,13 +52,13 @@ export default class ControlPhotoScreen extends React.Component {
         />
         <CustomButton
           title="Capturar Foto"
-          onClick={this.pickImageHandler.bind(this)}
+          onClick={this.pickImageHandler}
         />
         <View>
           <Text style={styles.title}>Iniciar el servicio como:</Text>
         </View>
         <View>
-          <Text style={styles.content}> {this.state.empleado} </Text>
+          <Text style={styles.content}> {this.state.employeeName} </Text>
         </View>
         <View>
           <CustomButton title="Iniciar" />
