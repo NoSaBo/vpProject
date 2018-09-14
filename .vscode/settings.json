@@ -1,0 +1,39 @@
+{
+	"folders": [
+		{
+			"path": "/home/bigeyestoad/Documents/react/react-tutorial"
+		},
+		{
+			"path": "/home/bigeyestoad/Documents/react/tmp_ui_cuarteto"
+		},
+		{
+			"path": "/home/bigeyestoad/Documents/react/congresman"
+		},
+		{
+			"path": "/home/bigeyestoad/Documents/react/mouse-tracker"
+		},
+		{
+			"path": "/home/bigeyestoad/Documents/react/fractal"
+		},
+		{
+			"path": "/home/bigeyestoad/Documents/javascript/appWeather"
+		},
+		{
+			"path": "/home/bigeyestoad/Documents/react/vpProject"
+		},
+		{
+			"path": "/home/bigeyestoad/Documents/react/server/vp-graphql-server"
+		},
+		{
+			"path": "/home/bigeyestoad/Documents/react/tests/awesome"
+		},
+		{
+			"path": "/home/bigeyestoad/Documents/react/projects/graphql-tutorial"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "appWeather",
+		"git.ignoreLimitWarning": true,
+		"flow.useNPMPackagedFlow": true
+	}
+}
