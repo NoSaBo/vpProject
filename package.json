@@ -7,7 +7,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "apollo-boost": "^0.1.15",
+    "graphql": "^14.0.0",
     "react": "16.4.1",
+    "react-apollo": "^2.1.11",
     "react-native": "0.56.0",
     "react-native-collapsible": "^0.13.0",
     "react-native-image-picker": "^0.26.10",

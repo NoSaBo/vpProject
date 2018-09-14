@@ -10,7 +10,7 @@ import {
   Keyboard
 } from "react-native";
 
-import { SwitchNavigator, StackNavigator } from "react-navigation";
+import { createSwitchNavigator, StackNavigator } from "react-navigation";
 
 import LoginScreen from "./src/screens/login-screen/index";
 import HomeScreen from "./src/screens/home-screen/index";
@@ -23,18 +23,12 @@ const ControlStack = StackNavigator({
   Photo: ControlPhotoScreen
 });
 
-const RootSwitch = SwitchNavigator(
-  {
-    Control: ControlStack,
-    Login: { screen: LoginScreen }
-  },
-  {
-    initialRouteName: "Login"
-  }
-);
+const RootConfig = {
+  Control: ControlStack,
+  Login: { screen: LoginScreen }
+};
+const SwitchConfig = {
+  initialRouteName: "Login"
+};
 
-export default class App extends Component {
-  render() {
-    return <RootSwitch />;
-  }
-}
+export default createSwitchNavigator(RootConfig, SwitchConfig);
