@@ -13,7 +13,7 @@ export default StyleSheet.create({
     alignItems: "center",
     margin: 20,
     borderRadius: 10,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: "white"
   },
   text: {

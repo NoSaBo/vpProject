@@ -1,23 +1,23 @@
 /* @flow */
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Alert } from "react-native";
 import { createSwitchNavigator } from "react-navigation";
-import gql from "graphql-tag";
-import { withApollo } from "react-apollo";
+import { gql } from "apollo-boost";
+import { graphql } from "react-apollo";
 
 import Input from "./../../components/input";
 import CustomButton from "./../../components/button";
 import styles from "./styles";
 
-const FEED_QUERY = gql`
-  {
-    login(userName: "jreyp", password: "jesus") {
-      id
-      firstName
-      lastName
-    }
-  }
-`;
+// const FEED_QUERY = gql`
+//   {
+//     login(userName: "jreyp", password: "jesus") {
+//       id
+//       firstName
+//       lastName
+//     }
+//   }
+// `;
 
 type Props = {};
 
@@ -26,7 +26,7 @@ type State = {
   password: string
 };
 
-export class LoginScreen extends React.Component<Props, State> {
+export default class LoginScreen extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -44,27 +44,13 @@ export class LoginScreen extends React.Component<Props, State> {
   };
 
   handleButtonClick = () => {
-    console.log(this.props);
-    // this.props.client
-    //   .query({
-    //     query: gql`
-    //       {
-    //         login(userName: "jreyp", password: "jesus") {
-    //           id
-    //           firstName
-    //           lastName
-    //         }
-    //       }
-    //     `
-    //   })
-    //   .then(result => {
-    //     console.log(result);
-    //     // if (result.data) {
-    //     //   this.props.navigation.navigate("Home", {
-    //     //     user: "Jesus Rey"
-    //     //   });
-    //     // }
-    //   });
+    if (!this.state.user) {
+      Alert.alert("Login Error", "Debe ingresar un nombre de usuario");
+    } else {
+      this.props.navigation.navigate("Home", {
+        userName: this.state.user
+      });
+    }
   };
 
   render() {
@@ -89,5 +75,3 @@ export class LoginScreen extends React.Component<Props, State> {
     );
   }
 }
-
-export default withApollo(LoginScreen);

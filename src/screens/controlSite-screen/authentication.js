@@ -14,7 +14,7 @@ export default class ControlPhotoScreen extends React.Component {
   constructor() {
     super();
     this.state = {
-      empleado: "Richard Gomez"
+      empleado: "Employee.name"
     };
   }
 

@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import styles from "./styles";
 
 type Props = {
-  title: string,
+  name: string,
   date: string
 };
 
@@ -17,7 +17,7 @@ export default class AccordionHeader extends React.Component<Props> {
           <Text style={styles.left}> > </Text>
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.left}> {this.props.title} </Text>
+          <Text style={styles.left}> {this.props.name} </Text>
         </View>
         <View>
           <Text style={styles.right}>{this.props.date}</Text>
