@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from "react";
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, ScrollView } from "react-native";
 import styles from "./styles";
 import CustomButton from "../../components/button";
 import ImagePicker from "react-native-image-picker";
@@ -40,31 +40,44 @@ export default class ControlPhotoScreen extends React.Component {
     });
   };
 
+  handleButton = () => {};
+
   render() {
     return (
       <View style={styles.container}>
-        <Image
-          style={styles.image}
-          source={
-            this.state.pickedImage
-              ? this.state.pickedImage
-              : require("./../../images/manPhoto.png")
-          }
-          resizeMode="contain"
-        />
-        <CustomButton
-          title="Capturar Foto"
-          onClick={this.pickImageHandler.bind(this)}
-        />
-        <View>
-          <Text style={styles.title}>Iniciar el servicio como:</Text>
-        </View>
-        <View>
-          <Text style={styles.content}> {this.state.empleado} </Text>
-        </View>
-        <View>
-          <CustomButton title="Iniciar" />
-        </View>
+        <ScrollView>
+          <View style={styles.block}>
+            <Image
+              style={styles.image}
+              source={
+                this.state.pickedImage
+                  ? this.state.pickedImage
+                  : require("./../../images/manPhoto.png")
+              }
+              resizeMode="contain"
+            />
+            <CustomButton
+              title="Capturar foto"
+              onClick={this.pickImageHandler}
+              small={false}
+            />
+          </View>
+          <View style={styles.access}>
+            <View>
+              <Text style={styles.title}>Iniciar el servicio como:</Text>
+            </View>
+            <View>
+              <Text style={styles.content}> {this.state.empleado} </Text>
+            </View>
+            <View>
+              <CustomButton
+                title="Iniciar"
+                onClick={this.handleButton}
+                small={false}
+              />
+            </View>
+          </View>
+        </ScrollView>
       </View>
     );
   }

@@ -34,7 +34,11 @@ class accordionContent extends React.Component<Props> {
           </Text>
         </View>
         <View>
-          <CustomButton title="Iniciar turno" onClick={this.handleService} />
+          <CustomButton
+            title="Iniciar turno"
+            onClick={this.handleService}
+            small={true}
+          />
         </View>
       </View>
     );

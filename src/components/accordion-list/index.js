@@ -31,7 +31,7 @@ export default class AccordionList extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.header}>Tus Turnos</Text>
+        <Text style={styles.title}>Tus Turnos</Text>
         <View>
           <Accordion
             sections={this.props.sections}

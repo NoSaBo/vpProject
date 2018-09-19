@@ -6,6 +6,7 @@ import { gql } from "apollo-boost";
 import CustomButton from "./../../components/button";
 import AccordionList from "./../../components/accordion-list";
 import styles from "./styles";
+import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
 
 const HOME_QUERY = gql`
   query employee($userName: String!) {
@@ -52,7 +53,7 @@ export class HomeScreen extends React.Component<Props, State> {
     if (loading) {
       return (
         <View style={styles.container}>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color={COLOR_BASE} />
         </View>
       );
     }
@@ -60,7 +61,11 @@ export class HomeScreen extends React.Component<Props, State> {
       return (
         <View style={styles.container}>
           <Text style={styles.welcome}> Error </Text>
-          <CustomButton title="Volver" onClick={this.handleLogout} />
+          <CustomButton
+            title="Volver"
+            onClick={this.handleLogout}
+            small={true}
+          />
         </View>
       );
     } else {
@@ -68,15 +73,22 @@ export class HomeScreen extends React.Component<Props, State> {
       return (
         <View style={styles.container}>
           <ScrollView>
-            <View>
-              <Text style={styles.welcome}>
-                Bienvenido {firstName} {lastName}
-              </Text>
+            <View style={styles.user}>
+              <View>
+                <Text style={styles.welcome}>Bienvenido</Text>
+                <Text style={styles.welcome}>
+                  {firstName} {lastName}
+                </Text>
+              </View>
+              <View>
+                <CustomButton
+                  title="Cerrar Sesión"
+                  onClick={this.handleLogout}
+                  small={true}
+                />
+              </View>
             </View>
-            <View>
-              <CustomButton title="Cerrar Sesión" onClick={this.handleLogout} />
-            </View>
-            <View>
+            <View style={styles.list}>
               <AccordionList
                 sections={this.props.data.employee.shifts}
                 userName={this.props.navigation.state.params.userName}

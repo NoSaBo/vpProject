@@ -70,7 +70,11 @@ export default class LoginScreen extends React.Component<Props, State> {
           handleInput={this.handlePassword}
           secure={true}
         />
-        <CustomButton title="Iniciar" onClick={this.handleButtonClick} />
+        <CustomButton
+          title="Iniciar"
+          onClick={this.handleButtonClick}
+          small={false}
+        />
       </View>
     );
   }
