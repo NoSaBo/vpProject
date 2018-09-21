@@ -9,16 +9,6 @@ import Input from "./../../components/input";
 import CustomButton from "./../../components/button";
 import styles from "./styles";
 
-// const FEED_QUERY = gql`
-//   {
-//     login(userName: "jreyp", password: "jesus") {
-//       id
-//       firstName
-//       lastName
-//     }
-//   }
-// `;
-
 type Props = {};
 
 type State = {

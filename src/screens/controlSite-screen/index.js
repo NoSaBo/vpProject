@@ -36,7 +36,9 @@ const SITE_QUERY = gql`
 
 type Props = {};
 
-type State = {};
+type State = {
+  user: string
+};
 
 export class ControlSiteScreen extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -56,8 +58,9 @@ export class ControlSiteScreen extends React.Component<Props, State> {
   };
 
   handleButtonClick = () => {
-    if (this.state.inPosition) this.props.navigation.navigate("Photo");
-    else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");
+    // if (this.state.inPosition)
+    this.props.navigation.navigate("Photo");
+    // else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");
   };
 
   handleUser = (text: string) => {
