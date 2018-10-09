@@ -40,7 +40,9 @@ export default class ControlPhotoScreen extends React.Component {
     });
   };
 
-  handleButton = () => {};
+  handleButton = () => {
+    this.props.navigation.navigate("Service");
+  };
 
   render() {
     return (

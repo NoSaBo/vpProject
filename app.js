@@ -10,17 +10,43 @@ import {
   Keyboard
 } from "react-native";
 
-import { createSwitchNavigator, createStackNavigator } from "react-navigation";
+import {
+  createSwitchNavigator,
+  createStackNavigator,
+  createMaterialTopTabNavigator
+} from "react-navigation";
 
 import LoginScreen from "./src/screens/login-screen/index";
 import HomeScreen from "./src/screens/home-screen/index";
 import ControlSiteScreen from "./src/screens/controlSite-screen/index";
 import ControlPhotoScreen from "./src/screens/controlSite-screen/authentication";
+import EmployeeScreen from "./src/screens/service-tab/employee-screen";
+import ServiceScreen from "./src/screens/service-tab/service-screen";
+
+const ServiceTab = createMaterialTopTabNavigator(
+  {
+    EmployeeTab: EmployeeScreen,
+    ServiceTab: ServiceScreen
+  },
+  {
+    initialRouteName: "EmployeeTab"
+  }
+);
+
+const ServiceStack = createStackNavigator(
+  {
+    ServiceTab: ServiceTab
+  },
+  {
+    initialRouteName: "ServiceTab"
+  }
+);
 
 const ControlStack = createStackNavigator({
   Home: { screen: HomeScreen },
   Site: ControlSiteScreen,
-  Photo: ControlPhotoScreen
+  Auth: ControlPhotoScreen,
+  Service: ServiceStack
 });
 
 const RootSwitch = createSwitchNavigator(

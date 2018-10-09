@@ -59,7 +59,7 @@ export class ControlSiteScreen extends React.Component<Props, State> {
 
   handleButtonClick = () => {
     // if (this.state.inPosition)
-    this.props.navigation.navigate("Photo");
+    this.props.navigation.navigate("Auth");
     // else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");
   };
 
