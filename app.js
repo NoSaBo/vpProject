@@ -10,55 +10,9 @@ import {
   Keyboard
 } from "react-native";
 
-import {
-  createSwitchNavigator,
-  createStackNavigator,
-  createMaterialTopTabNavigator
-} from "react-navigation";
+import RootSwitch from "./src/routes";
 
-import LoginScreen from "./src/screens/login-screen/index";
-import HomeScreen from "./src/screens/home-screen/index";
-import ControlSiteScreen from "./src/screens/controlSite-screen/index";
-import ControlPhotoScreen from "./src/screens/controlSite-screen/authentication";
-import EmployeeScreen from "./src/screens/service-tab/employee-screen";
-import ServiceScreen from "./src/screens/service-tab/service-screen";
-
-const ServiceTab = createMaterialTopTabNavigator(
-  {
-    EmployeeTab: EmployeeScreen,
-    ServiceTab: ServiceScreen
-  },
-  {
-    initialRouteName: "EmployeeTab"
-  }
-);
-
-const ServiceStack = createStackNavigator(
-  {
-    ServiceTab: ServiceTab
-  },
-  {
-    initialRouteName: "ServiceTab"
-  }
-);
-
-const ControlStack = createStackNavigator({
-  Home: { screen: HomeScreen },
-  Site: ControlSiteScreen,
-  Auth: ControlPhotoScreen,
-  Service: ServiceStack
-});
-
-const RootSwitch = createSwitchNavigator(
-  {
-    Control: ControlStack,
-    Login: { screen: LoginScreen }
-  },
-  {
-    initialRouteName: "Login"
-  }
-);
-
+// Apollo Config
 import { ApolloProvider } from "react-apollo";
 import { ApolloClient } from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
@@ -74,6 +28,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
+//App Component
 export default class App extends Component {
   constructor(props) {
     super(props);
