@@ -6,8 +6,7 @@ import CustomButton from "./../../components/button";
 
 import styles from "./styles";
 // navigation
-import { withNavigation } from 'react-navigation';
-
+import { withNavigation } from "react-navigation";
 
 type Props = {
   address: string,
@@ -17,9 +16,11 @@ type Props = {
 
 class accordionContent extends React.Component<Props> {
   handleService = () => {
-    this.props.navigation.navigate('Site')
+    this.props.navigation.navigate("Site", {
+      id: this.props.id,
+      userName: this.props.userName
+    });
   };
-
 
   render() {
     return (
@@ -33,12 +34,15 @@ class accordionContent extends React.Component<Props> {
           </Text>
         </View>
         <View>
-          <CustomButton title="Iniciar turno" onClick={this.handleService} />
+          <CustomButton
+            title="Iniciar turno"
+            onClick={this.handleService}
+            small={true}
+          />
         </View>
       </View>
     );
   }
 }
-
 
 export default withNavigation(accordionContent);

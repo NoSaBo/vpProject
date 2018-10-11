@@ -2,12 +2,12 @@
 
 import { StyleSheet } from "react-native";
 
-import { COLOR_PRIMARY } from "./../../common";
+import { COLOR_BASE } from "./../../common";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLOR_PRIMARY,
+    backgroundColor: COLOR_BASE,
     alignItems: "center",
     justifyContent: "center"
   },

@@ -1,6 +1,10 @@
 /* @flow */
 import React from "react";
-import { View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Alert } from "react-native";
+import { createSwitchNavigator } from "react-navigation";
+import { gql } from "apollo-boost";
+import { graphql } from "react-apollo";
+
 import Input from "./../../components/input";
 import CustomButton from "./../../components/button";
 import styles from "./styles";
@@ -30,9 +34,13 @@ export default class LoginScreen extends React.Component<Props, State> {
   };
 
   handleButtonClick = () => {
-    this.props.navigation.navigate("Home", {
-      user: "Jesus Rey"
-    });
+    if (!this.state.user) {
+      Alert.alert("Login Error", "Debe ingresar un nombre de usuario");
+    } else {
+      this.props.navigation.navigate("Home", {
+        userName: this.state.user
+      });
+    }
   };
 
   render() {
@@ -40,7 +48,7 @@ export default class LoginScreen extends React.Component<Props, State> {
       <View style={styles.container}>
         <Image
           style={styles.image}
-          source={require("./../../images/logo.png")}
+          source={require("./../../images/logo2.png")}
         />
         <Input
           placeholder={"Usuario"}
@@ -52,7 +60,11 @@ export default class LoginScreen extends React.Component<Props, State> {
           handleInput={this.handlePassword}
           secure={true}
         />
-        <CustomButton title="Iniciar" onClick={this.handleButtonClick} />
+        <CustomButton
+          title="Iniciar"
+          onClick={this.handleButtonClick}
+          small={false}
+        />
       </View>
     );
   }

@@ -2,7 +2,7 @@
 
 import { StyleSheet } from "react-native";
 
-import { FONT_NORMAL } from "./../../common";
+import { FONT_NORMAL, COLOR_SECONDARY } from "./../../common";
 
 export default StyleSheet.create({
   input: {
@@ -14,7 +14,7 @@ export default StyleSheet.create({
     margin: 5,
     fontFamily: FONT_NORMAL,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "white"
+    borderWidth: 0.2,
+    borderColor: COLOR_SECONDARY
   }
 });

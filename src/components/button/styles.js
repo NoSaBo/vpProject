@@ -2,23 +2,41 @@
 
 import { StyleSheet } from "react-native";
 
-import { FONT_NORMAL } from "./../../common";
+import { FONT_NORMAL, COLOR_BASE, COLOR_PRIMARY } from "./../../common";
 
 export default StyleSheet.create({
-  button: {
-    width: 300,
-    height: 45,
-    backgroundColor: "blue",
+  buttonSmall: {
+    width: 180,
+    height: 30,
+    backgroundColor: COLOR_PRIMARY,
     justifyContent: "center",
     alignItems: "center",
-    margin: 20,
+    marginTop: 15,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "white"
+    borderWidth: 0,
+    borderColor: COLOR_BASE
   },
-  text: {
+  buttonNormal: {
+    width: 300,
+    height: 45,
+    backgroundColor: COLOR_PRIMARY,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 15,
+    borderRadius: 10,
+    borderWidth: 0,
+    borderColor: COLOR_BASE
+  },
+  textNormal: {
     color: "white",
     fontSize: 22,
-    fontFamily: FONT_NORMAL
+    fontFamily: FONT_NORMAL,
+    color: COLOR_BASE
+  },
+  textSmall: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: FONT_NORMAL,
+    color: COLOR_BASE
   }
 });
