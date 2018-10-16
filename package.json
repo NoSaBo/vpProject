@@ -15,7 +15,9 @@
     "react-native": "0.56.0",
     "react-native-collapsible": "^0.13.0",
     "react-native-image-picker": "^0.26.10",
-    "react-navigation": "^2.11.2"
+    "react-navigation": "^2.11.2",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.1"
   },
   "devDependencies": {
     "babel-jest": "23.4.2",
