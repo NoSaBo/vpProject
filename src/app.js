@@ -10,8 +10,7 @@ import {
   Keyboard
 } from "react-native";
 import { ApolloProvider } from "react-apollo";
-import { Provider } from "react-redux";
-import { client, store } from "./redux/store";
+import { client } from "./apollo/client";
 
 import RootSwitch from "./routes";
 
@@ -27,9 +26,7 @@ export default class App extends Component<Props, State> {
   render() {
     return (
       <ApolloProvider client={client}>
-        <Provider store={store}>
-          <RootSwitch />
-        </Provider>
+        <RootSwitch />
       </ApolloProvider>
     );
   }

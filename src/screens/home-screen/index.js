@@ -2,31 +2,12 @@
 import React from "react";
 import { View, ScrollView, Text, ActivityIndicator } from "react-native";
 import { graphql } from "react-apollo";
+import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 import CustomButton from "./../../components/button";
 import AccordionList from "./../../components/accordion-list";
 import styles from "./styles";
 import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
-
-const HOME_QUERY = gql`
-  query employee($userName: String!) {
-    employee(userName: $userName) {
-      id
-      firstName
-      lastName
-      shifts {
-        id
-        date
-        begin
-        end
-        branch {
-          branchName
-          address
-        }
-      }
-    }
-  }
-`;
 
 type Props = {
   userName: string
@@ -64,7 +45,7 @@ export class HomeScreen extends React.Component<Props, State> {
           <CustomButton
             title="Volver"
             onClick={this.handleLogout}
-            small={true}
+            size="Small"
           />
         </View>
       );
@@ -84,7 +65,7 @@ export class HomeScreen extends React.Component<Props, State> {
                 <CustomButton
                   title="Cerrar Sesión"
                   onClick={this.handleLogout}
-                  small={true}
+                  size="Small"
                 />
               </View>
             </View>
@@ -100,6 +81,26 @@ export class HomeScreen extends React.Component<Props, State> {
     }
   }
 }
+
+const HOME_QUERY = gql`
+  query employee($userName: String!) {
+    employee(userName: $userName) {
+      id
+      firstName
+      lastName
+      shifts {
+        id
+        date
+        begin
+        end
+        branch {
+          branchName
+          address
+        }
+      }
+    }
+  }
+`;
 
 export default graphql(HOME_QUERY, {
   options: props => ({

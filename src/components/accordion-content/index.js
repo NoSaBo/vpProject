@@ -17,27 +17,27 @@ type Props = {
 class accordionContent extends React.Component<Props> {
   handleService = () => {
     this.props.navigation.navigate("Site", {
-      id: this.props.id,
-      userName: this.props.userName
+      id: this.props.id
     });
   };
 
   render() {
+    const { address, begin, end } = this.props;
     return (
       <View style={styles.container}>
         <View>
-          <Text style={styles.text}> {this.props.address} </Text>
+          <Text style={styles.text}> {address} </Text>
         </View>
         <View>
           <Text style={styles.text}>
-            {this.props.begin} - {this.props.end}
+            {begin} - {end}
           </Text>
         </View>
         <View>
           <CustomButton
             title="Iniciar turno"
             onClick={this.handleService}
-            small={true}
+            size="Small"
           />
         </View>
       </View>

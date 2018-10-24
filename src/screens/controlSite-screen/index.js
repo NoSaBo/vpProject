@@ -20,20 +20,6 @@ import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
 import Input from "./../../components/input";
 import CustomButton from "./../../components/button";
 
-const SITE_QUERY = gql`
-  query serviceShift($id: Int!) {
-    serviceShift(id: $id) {
-      begin
-      end
-      branch {
-        branchName
-        latitude
-        longitude
-      }
-    }
-  }
-`;
-
 type Props = {};
 
 type State = {
@@ -58,9 +44,15 @@ export class ControlSiteScreen extends React.Component<Props, State> {
   };
 
   handleButtonClick = () => {
-    // if (this.state.inPosition)
-    this.props.navigation.navigate("Auth");
-    // else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");
+    // if (this.state.inPosition) {
+    const { branchName } = this.props.data.serviceShift.branch;
+    const { begin, end } = this.props.data.serviceShift;
+    this.props.navigation.navigate("Auth", {
+      branch: branchName,
+      begin: begin,
+      end: end
+    });
+    // } else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");
   };
 
   handleUser = (text: string) => {
@@ -184,7 +176,7 @@ export class ControlSiteScreen extends React.Component<Props, State> {
               <CustomButton
                 title="Acceder"
                 onClick={this.handleButtonClick}
-                small={false}
+                size="Normal"
               />
             </View>
           </ScrollView>
@@ -193,6 +185,20 @@ export class ControlSiteScreen extends React.Component<Props, State> {
     }
   }
 }
+
+const SITE_QUERY = gql`
+  query serviceShift($id: Int!) {
+    serviceShift(id: $id) {
+      begin
+      end
+      branch {
+        branchName
+        latitude
+        longitude
+      }
+    }
+  }
+`;
 
 export default graphql(SITE_QUERY, {
   options: props => ({
