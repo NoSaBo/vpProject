@@ -29,7 +29,7 @@ export class EmployeeScreen extends React.Component<Props, State> {
 
   render() {
     const { userName } = this.props.data;
-    console.log("error aqui?", this.props.navigation.state.params);
+    console.log("csm", userName);
     const { branch, begin, end } = this.props.navigation.state.params;
     return (
       <View style={styles.container}>
@@ -45,17 +45,6 @@ export class EmployeeScreen extends React.Component<Props, State> {
           </View>
         </View>
         <View style={styles.block}>
-          <View style={styles.table}>
-            <Text style={styles.content}> {userName}</Text>
-            <CustomButton
-              title="-"
-              onClick={this.handleLogout}
-              size="ExtraSmall"
-            />
-          </View>
-
-          <CustomButton title="+" onClick={this.handleAdd} size="ExtraSmall" />
-
           <CustomButton
             title="Finalizar Turno"
             onClick={this.handleLogout}
