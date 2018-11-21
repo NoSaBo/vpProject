@@ -6,12 +6,14 @@ import {
   View,
   TextInput,
   ScrollView,
+  Image,
   ActivityIndicator,
   Alert,
   PermissionsAndroid
 } from "react-native";
 import { graphql } from "react-apollo";
 import { gql } from "apollo-boost";
+import ImagePicker from "react-native-image-picker";
 import geolib from "geolib";
 
 import styles from "./styles";
@@ -20,19 +22,9 @@ import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
 import Input from "./../../components/input";
 import CustomButton from "./../../components/button";
 
-const SITE_QUERY = gql`
-  query serviceShift($id: Int!) {
-    serviceShift(id: $id) {
-      begin
-      end
-      branch {
-        branchName
-        latitude
-        longitude
-      }
-    }
-  }
-`;
+const photoOptions = {
+  quality: 1
+};
 
 type Props = {};
 
@@ -53,20 +45,33 @@ export class ControlSiteScreen extends React.Component<Props, State> {
     };
   }
 
-  static navigationOptions = {
-    title: "Inicio de Turno"
+  pickImageHandler = () => {
+    ImagePicker.launchCamera(photoOptions, res => {
+      if (res.didCancel) {
+        console.log("User cancelled!");
+      } else if (res.error) {
+        console.log("Error", res.error);
+      } else {
+        this.setState({
+          pickedImage: { uri: res.uri }
+        });
+      }
+    });
   };
 
   handleButtonClick = () => {
-    // if (this.state.inPosition)
-    this.props.navigation.navigate("Auth");
-    // else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");
+    // if (this.state.inPosition) {
+    const { branchName } = this.props.data.serviceShift.branch;
+    const { begin, end } = this.props.data.serviceShift;
+    this.props.navigation.navigate("EmployeeTab", {
+      branch: branchName,
+      begin: begin,
+      end: end
+    });
+    // } else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");
   };
 
-  handleUser = (text: string) => {
-    this.setState({ user: text });
-  };
-
+  // Permissions
   async requestGPSPermission() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -83,7 +88,7 @@ export class ControlSiteScreen extends React.Component<Props, State> {
         alert("No podra acceder a sus turnos");
       }
     } catch (err) {
-      console.warn(err);
+      console.warn("err:", err);
     }
   }
 
@@ -92,45 +97,49 @@ export class ControlSiteScreen extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    this.watchId = navigator.geolocation.watchPosition(
-      position => {
-        console.log(position.coords);
-        this.setState({
-          error: null,
-          alert: "Obteniendo posición"
-        });
-        const { latitude, longitude } = this.props.data.serviceShift.branch;
-        const distance = geolib.getDistance(
-          position.coords,
-          {
-            latitude: latitude,
-            longitude: longitude
-          },
-          1,
-          1
-        );
-        console.log(distance);
-        if (distance < 50) {
+    const { loading, error } = this.props.data;
+    if (!loading) {
+      console.log("INICIATE LOCATION");
+      this.watchId = navigator.geolocation.watchPosition(
+        position => {
+          console.log("POSITION COORDS", position.coords);
           this.setState({
-            inPosition: true,
-            alert: "Estas en el perimetro de la sede",
-            error: null
+            error: null,
+            alert: "Obteniendo posición"
           });
-        } else {
-          this.setState({
-            inPosition: false,
-            alert: "No estas en el perimetro de la sede"
-          });
+          const { latitude, longitude } = this.props.data.serviceShift.branch;
+          const distance = geolib.getDistance(
+            position.coords,
+            {
+              latitude: latitude,
+              longitude: longitude
+            },
+            1,
+            1
+          );
+          console.log("DISTANCE", distance);
+          if (distance < 50) {
+            this.setState({
+              inPosition: true,
+              alert: "Estas en el perimetro de la sede",
+              error: null
+            });
+          } else {
+            this.setState({
+              inPosition: false,
+              alert: "No estas en el perimetro de la sede"
+            });
+          }
+        },
+        error => this.setState({ error: error.message }),
+        {
+          enableHighAccuracy: true,
+          timeout: 20000,
+          maximumAge: 1000,
+          distanceFilter: 10
         }
-      },
-      error => this.setState({ error: error.message }),
-      {
-        enableHighAccuracy: true,
-        timeout: 20000,
-        maximumAge: 1000,
-        distanceFilter: 10
-      }
-    );
+      );
+    }
   }
 
   componentWillUnmount() {
@@ -147,6 +156,7 @@ export class ControlSiteScreen extends React.Component<Props, State> {
         </View>
       );
     else {
+      console.log("DATA LOADED:", this.props.data);
       const { begin, end } = this.props.data.serviceShift;
       const { branchName } = this.props.data.serviceShift.branch;
       return (
@@ -175,16 +185,27 @@ export class ControlSiteScreen extends React.Component<Props, State> {
                 </Text>
               </View>
             </View>
-            <View style={styles.access}>
-              <Input
-                placeholder={"Usuario"}
-                handleInput={this.handleUser}
-                secure={false}
+            <View style={styles.block}>
+              <Image
+                style={styles.image}
+                source={
+                  this.state.pickedImage
+                    ? this.state.pickedImage
+                    : require("./../../images/manPhoto.png")
+                }
+                resizeMode="contain"
               />
               <CustomButton
-                title="Acceder"
+                title="Capturar foto"
+                onClick={this.pickImageHandler}
+                size="Normal"
+              />
+            </View>
+            <View style={styles.access}>
+              <CustomButton
+                title="Iniciar Turno"
                 onClick={this.handleButtonClick}
-                small={false}
+                size="Normal"
               />
             </View>
           </ScrollView>
@@ -193,6 +214,20 @@ export class ControlSiteScreen extends React.Component<Props, State> {
     }
   }
 }
+
+const SITE_QUERY = gql`
+  query serviceShift($id: Int!) {
+    serviceShift(id: $id) {
+      begin
+      end
+      branch {
+        branchName
+        latitude
+        longitude
+      }
+    }
+  }
+`;
 
 export default graphql(SITE_QUERY, {
   options: props => ({

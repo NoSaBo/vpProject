@@ -12,23 +12,54 @@ type Props = {};
 
 type State = {};
 
-export default class EmployeeScreen extends React.Component<Props, State> {
+export class EmployeeScreen extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {};
   }
 
-  handleLogout = () => {};
+  handleLogout = () => {
+    // this.props.navigation.popToTop("Home");
+    this.props.navigation.navigate("Home", {});
+  };
+
+  handleAdd = () => {
+    this.props.navigation.navigate("Site");
+  };
 
   render() {
+    const { userName } = this.props.data;
+    console.log("csm", userName);
+    const { branch, begin, end } = this.props.navigation.state.params;
     return (
       <View style={styles.container}>
-        <CustomButton
-          title="Cerrar Sesion"
-          onClick={this.handleLogout}
-          small={false}
-        />
+        <View style={styles.label}>
+          <View>
+            <Text style={styles.content}> {branch} </Text>
+          </View>
+          <View>
+            <Text style={styles.content}>
+              {" "}
+              {begin} {" - "} {end}{" "}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.block}>
+          <CustomButton
+            title="Finalizar Turno"
+            onClick={this.handleLogout}
+            size="Normal"
+          />
+        </View>
       </View>
     );
   }
 }
+
+const SHIFT_QUERY = gql`
+  {
+    userName @client
+  }
+`;
+
+export default graphql(SHIFT_QUERY)(EmployeeScreen);

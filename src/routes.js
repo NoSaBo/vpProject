@@ -8,14 +8,14 @@ import {
 import LoginScreen from "./screens/login-screen/index";
 import HomeScreen from "./screens/home-screen/index";
 import ControlSiteScreen from "./screens/controlSite-screen/index";
-import ControlPhotoScreen from "./screens/controlSite-screen/authentication";
 import EmployeeScreen from "./screens/service-tab/employee-screen";
 import ServiceScreen from "./screens/service-tab/service-screen";
+import RegisterScreen from "./screens/register-car/index";
 
 import { COLOR_PRIMARY, COLOR_BASE } from "./common";
 
 // Service Routes
-const ServiceTab = createMaterialTopTabNavigator(
+const ServiceTabs = createMaterialTopTabNavigator(
   {
     EmployeeTab: {
       screen: EmployeeScreen,
@@ -53,10 +53,11 @@ const ServiceTab = createMaterialTopTabNavigator(
 
 const ServiceStack = createStackNavigator(
   {
-    ServiceTab: ServiceTab
+    Service: ServiceTabs,
+    Register: RegisterScreen
   },
   {
-    initialRouteName: "ServiceTab",
+    initialRouteName: "Service",
     headerMode: "none"
   }
 );
@@ -70,11 +71,11 @@ const ControlStack = createStackNavigator(
   {
     Home: { screen: HomeScreen },
     Site: ControlSiteScreen,
-    Auth: ControlPhotoScreen,
     Service: ServiceStack
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "Home",
+    headerMode: "none"
   }
 );
 

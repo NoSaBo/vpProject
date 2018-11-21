@@ -16,6 +16,12 @@ export default StyleSheet.create({
     borderWidth: 0,
     borderColor: COLOR_BASE
   },
+  textSmall: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: FONT_NORMAL,
+    color: COLOR_BASE
+  },
   buttonNormal: {
     width: 300,
     height: 45,
@@ -33,10 +39,39 @@ export default StyleSheet.create({
     fontFamily: FONT_NORMAL,
     color: COLOR_BASE
   },
-  textSmall: {
+  buttonExtraSmall: {
+    width: 40,
+    height: 30,
+    backgroundColor: COLOR_PRIMARY,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 15,
+    borderRadius: 10,
+    borderWidth: 0,
+    borderColor: COLOR_BASE
+  },
+  textExtraSmall: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: FONT_NORMAL,
     color: COLOR_BASE
-  }
+  },
+  buttonLarge: {
+    width: 300,
+    height: 160,
+    backgroundColor: COLOR_PRIMARY,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 15,
+    borderRadius: 10,
+    borderWidth: 0,
+    borderColor: COLOR_BASE,
+    padding: 10
+  },
+  textLarge: {
+    color: "white",
+    fontSize: 30,
+    fontFamily: FONT_NORMAL,
+    color: COLOR_BASE
+  },
 });

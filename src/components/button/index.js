@@ -12,12 +12,14 @@ type Props = {
 
 export default class CustomButton extends React.Component<Props> {
   render() {
+    const but = "button";
+    const text = "text";
     return (
       <TouchableOpacity
-        style={this.props.small ? styles.buttonSmall : styles.buttonNormal}
+        style={styles[but.concat(this.props.size)]}
         onPress={this.props.onClick}
       >
-        <Text style={this.props.small ? styles.textSmall : styles.textNormal}>
+        <Text style={styles[text.concat(this.props.size)]}>
           {this.props.title}
         </Text>
       </TouchableOpacity>

@@ -18,7 +18,10 @@ export default class ServiceScreen extends React.Component<Props, State> {
     this.state = {};
   }
 
-  handleRegister = () => {};
+  handleRegister = () => {
+    console.log("Register", this.props.navigation);
+    this.props.navigation.navigate("Register");
+  };
 
   handleReturn = () => {};
 
@@ -28,12 +31,12 @@ export default class ServiceScreen extends React.Component<Props, State> {
         <CustomButton
           title="Registrar Vehiculo"
           onClick={this.handleRegister}
-          small={false}
+          size="Large"
         />
         <CustomButton
           title="Devolver Vehiculo"
           onClick={this.handleReturn}
-          small={false}
+          size="Large"
         />
       </View>
     );
