@@ -55,6 +55,7 @@ export class RegisterScreen extends React.Component<Props, State> {
 
   _signaturePadError = error => {
     console.error(error);
+    console.log("SignatureError", error);
   };
 
   _signaturePadChange = ({ base64DataUrl }) => {
@@ -64,28 +65,26 @@ export class RegisterScreen extends React.Component<Props, State> {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView>
-          <View style={styles.block}>
-            <Text style={styles.content}>Placa*</Text>
-            <Input
-              placeholder={"Nro de placa"}
-              handleInput={this.handleUser}
-              secure={false}
-            />
+        <View style={styles.block}>
+          <Text style={styles.content}>Placa*</Text>
+          <Input
+            placeholder={"Nro de placa"}
+            handleInput={this.handleUser}
+            secure={false}
+          />
 
-            <Text style={styles.content}>Propietario</Text>
-            <Input
-              placeholder={"Nombre del cliente"}
-              handleInput={this.handlePassword}
-              secure={false}
-            />
-            <CustomButton
-              title="Registrar"
-              onClick={this.handleButtonClick}
-              size="Normal"
-            />
-          </View>
-        </ScrollView>
+          <Text style={styles.content}>Propietario</Text>
+          <Input
+            placeholder={"Nombre del cliente"}
+            handleInput={this.handlePassword}
+            secure={false}
+          />
+          <CustomButton
+            title="Registrar"
+            onClick={this.handleButtonClick}
+            size="Normal"
+          />
+        </View>
       </View>
     );
   }

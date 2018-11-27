@@ -15,7 +15,8 @@ export default StyleSheet.create({
     justifyContent: "center"
   },
   block: {
-    height: 320,
+    // height: 320,
+    flex: 1,
     backgroundColor: COLOR_BASE,
     justifyContent: "center",
     alignItems: "center",

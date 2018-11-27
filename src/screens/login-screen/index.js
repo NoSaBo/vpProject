@@ -109,7 +109,6 @@ export default class LoginScreen extends React.Component<Props, State> {
                       password: this.state.password
                     }
                   });
-                  console.log("login!:", data.login);
                   const { userName, firstName, lastName } = data.login;
                   client.writeData({
                     data: {

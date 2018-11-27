@@ -19,7 +19,6 @@ export default class ServiceScreen extends React.Component<Props, State> {
   }
 
   handleRegister = () => {
-    console.log("Register", this.props.navigation);
     this.props.navigation.navigate("Register");
   };
 

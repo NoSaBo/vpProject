@@ -13,10 +13,10 @@
     "graphql": "^14.0.0",
     "react": "16.4.1",
     "react-apollo": "^2.1.11",
-    "react-native": "^0.57.5",
+    "react-dom": "16.6.3",
+    "react-native": "0.56.0",
     "react-native-collapsible": "^0.13.0",
     "react-native-image-picker": "^0.26.10",
-    "react-native-signature-pad-updated": "^0.1.0",
     "react-navigation": "^2.11.2"
   },
   "devDependencies": {
@@ -25,6 +25,7 @@
     "flow": "^0.2.2",
     "flow-bin": "^0.75.0",
     "jest": "23.5.0",
+    "prop-types": "^15.6.2",
     "react-test-renderer": "16.4.1"
   },
   "jest": {
