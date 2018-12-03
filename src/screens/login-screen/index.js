@@ -1,6 +1,13 @@
 /* @flow */
 import React from "react";
-import { StyleSheet, Text, View, Image, Alert } from "react-native";
+import {
+  AsyncStorage,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Alert
+} from "react-native";
 import { createSwitchNavigator } from "react-navigation";
 import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
@@ -58,6 +65,16 @@ export default class LoginScreen extends React.Component<Props, State> {
     this.setState({ password: text });
   };
 
+  componentWillMount() {
+    AsyncStorage.getItem("user").then(value => {
+      if (value) {
+        this.props.navigation.navigate("Home", {
+          userName: value
+        });
+      }
+    });
+  }
+
   // async handleButtonClick(client) {
   //   if (!this.state.user) {
   //     Alert.alert("Login Error", "Debe ingresar un nombre de usuario");
@@ -110,6 +127,7 @@ export default class LoginScreen extends React.Component<Props, State> {
                     }
                   });
                   const { userName, firstName, lastName } = data.login;
+                  AsyncStorage.setItem("user", userName);
                   client.writeData({
                     data: {
                       userName: userName,
