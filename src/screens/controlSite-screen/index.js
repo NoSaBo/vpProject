@@ -60,15 +60,17 @@ export class ControlSiteScreen extends React.Component<Props, State> {
   };
 
   handleButtonClick = () => {
-    // if (this.state.inPosition) {
-    const { branchName } = this.props.data.serviceShift.branch;
-    const { begin, end } = this.props.data.serviceShift;
-    this.props.navigation.navigate("EmployeeTab", {
-      branch: branchName,
-      begin: begin,
-      end: end
-    });
-    // } else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");
+    if (this.state.inPosition) {
+      const { branchName } = this.props.data.serviceShift.branch;
+      const { begin, end } = this.props.data.serviceShift;
+      this.props.navigation.navigate("EmployeeTab", {
+        branch: branchName,
+        begin: begin,
+        end: end
+      });
+      navigator.geolocation.clearWatch(this.watchId);
+      console.log("cerrado!");
+    } else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");
   };
 
   // Permissions
@@ -97,49 +99,47 @@ export class ControlSiteScreen extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { loading, error } = this.props.data;
-    if (!loading) {
-      console.log("INICIATE LOCATION");
-      this.watchId = navigator.geolocation.watchPosition(
-        position => {
-          console.log("POSITION COORDS", position.coords);
+    // const { loading, error } = this.props.data;
+    console.log("INICIATE LOCATION");
+    this.watchId = navigator.geolocation.watchPosition(
+      position => {
+        console.log("POSITION COORDS", position.coords);
+        this.setState({
+          error: null,
+          alert: "Obteniendo posición"
+        });
+        const { latitude, longitude } = this.props.data.serviceShift.branch;
+        const distance = geolib.getDistance(
+          position.coords,
+          {
+            latitude: latitude,
+            longitude: longitude
+          },
+          1,
+          1
+        );
+        console.log("DISTANCE", distance);
+        if (distance < 50) {
           this.setState({
-            error: null,
-            alert: "Obteniendo posición"
+            inPosition: true,
+            alert: "Estas en el perimetro de la sede",
+            error: null
           });
-          const { latitude, longitude } = this.props.data.serviceShift.branch;
-          const distance = geolib.getDistance(
-            position.coords,
-            {
-              latitude: latitude,
-              longitude: longitude
-            },
-            1,
-            1
-          );
-          console.log("DISTANCE", distance);
-          if (distance < 50) {
-            this.setState({
-              inPosition: true,
-              alert: "Estas en el perimetro de la sede",
-              error: null
-            });
-          } else {
-            this.setState({
-              inPosition: false,
-              alert: "No estas en el perimetro de la sede"
-            });
-          }
-        },
-        error => this.setState({ error: error.message }),
-        {
-          enableHighAccuracy: true,
-          timeout: 20000,
-          maximumAge: 1000,
-          distanceFilter: 10
+        } else {
+          this.setState({
+            inPosition: false,
+            alert: "No estas en el perimetro de la sede"
+          });
         }
-      );
-    }
+      },
+      error => this.setState({ error: error.message }),
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000,
+        distanceFilter: 10
+      }
+    );
   }
 
   componentWillUnmount() {
@@ -178,12 +178,6 @@ export class ControlSiteScreen extends React.Component<Props, State> {
                   {begin} {" - "} {end}{" "}
                 </Text>
               </View>
-
-              <View>
-                <Text style={this.state.inPosition ? styles.green : styles.red}>
-                  {this.state.alert}
-                </Text>
-              </View>
             </View>
             <View style={styles.block}>
               <Image
@@ -202,6 +196,11 @@ export class ControlSiteScreen extends React.Component<Props, State> {
               />
             </View>
             <View style={styles.access}>
+              <View>
+                <Text style={this.state.inPosition ? styles.green : styles.red}>
+                  {this.state.alert}
+                </Text>
+              </View>
               <CustomButton
                 title="Iniciar Turno"
                 onClick={this.handleButtonClick}

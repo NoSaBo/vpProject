@@ -29,7 +29,7 @@ export class EmployeeScreen extends React.Component<Props, State> {
 
   render() {
     const { userName } = this.props.data;
-    console.log("csm", userName);
+    console.log("USERNAME", userName);
     const { branch, begin, end } = this.props.navigation.state.params;
     return (
       <View style={styles.container}>

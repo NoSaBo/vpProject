@@ -62,10 +62,6 @@ const ServiceStack = createStackNavigator(
   }
 );
 
-ServiceStack.navigationOptions = {
-  header: null
-};
-
 // Control Routes
 const ControlStack = createStackNavigator(
   {
