@@ -1,6 +1,12 @@
 /* @flow */
 import React from "react";
-import { View, ScrollView, Text, ActivityIndicator } from "react-native";
+import {
+  AsyncStorage,
+  View,
+  ScrollView,
+  Text,
+  ActivityIndicator
+} from "react-native";
 import { graphql } from "react-apollo";
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
@@ -21,12 +27,17 @@ export class HomeScreen extends React.Component<Props, State> {
     this.state = {};
   }
 
-  static navigationOptions = {
-    header: null
-  };
+  async removeItemValue(key) {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    } catch (exception) {
+      return false;
+    }
+  }
 
   handleLogout = () => {
-    this.props.navigation.navigate("Login");
+    if (this.removeItemValue("user")) this.props.navigation.navigate("Login");
   };
 
   render() {
