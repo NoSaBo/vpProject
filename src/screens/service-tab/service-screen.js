@@ -1,4 +1,3 @@
-/* @flow */
 import React from "react";
 import { StyleSheet, Text, View, Image, Alert } from "react-native";
 import { gql } from "apollo-boost";
@@ -8,12 +7,8 @@ import Input from "./../../components/input";
 import CustomButton from "./../../components/button";
 import styles from "./styles";
 
-type Props = {};
-
-type State = {};
-
-export default class ServiceScreen extends React.Component<Props, State> {
-  constructor(props: Props) {
+export default class ServiceScreen extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {};
   }

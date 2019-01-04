@@ -1,5 +1,3 @@
-/* @flow */
-
 import React, { Component } from "react";
 import {
   Modal,
@@ -28,12 +26,8 @@ import Signature from "./../../components/signature-canvas";
 //   quality: 1
 // };
 
-type Props = {};
-
-type State = {};
-
-export class RegisterScreen extends React.Component<Props, State> {
-  constructor(props: Props) {
+export class RegisterScreen extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       signature: null,
@@ -71,13 +65,13 @@ export class RegisterScreen extends React.Component<Props, State> {
 
   handleSignature = signature => {
     this.setState({ signature });
-    Alert.alert("La firma ha sido registrada.");
+    // Alert.alert("La firma ha sido registrada.");
     this.setModalSignVisible(false);
   };
 
   handleDamage = damage => {
     this.setState({ damage });
-    Alert.alert("Los daños han sido registrados.");
+    // Alert.alert("Los daños han sido registrados.");
     this.setModalReportVisible(false);
   };
 
@@ -103,10 +97,7 @@ export class RegisterScreen extends React.Component<Props, State> {
                 resizeMode={"contain"}
                 imageStyle={{ width: 300, height: 200 }}
                 style={{ width: 300, height: 200 }}
-                source={{
-                  uri:
-                    "https://st2.depositphotos.com/4162243/9047/v/950/depositphotos_90475184-stock-illustration-car-line-draw-insurance-rent.jpg"
-                }}
+                source={require("./../../images/car.jpg")}
               >
                 <Image
                   resizeMode={"contain"}

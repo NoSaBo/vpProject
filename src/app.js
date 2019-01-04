@@ -1,5 +1,3 @@
-/* @flow */
-
 import React, { Component } from "react";
 import {
   Platform,
@@ -14,12 +12,8 @@ import { client } from "./apollo/client";
 
 import RootSwitch from "./routes";
 
-type Props = {};
-
-type State = {};
-
-export default class App extends Component<Props, State> {
-  constructor(props: Props) {
+export default class App extends Component {
+  constructor(props) {
     super(props);
     this.state = {};
   }

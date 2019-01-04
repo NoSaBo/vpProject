@@ -15,14 +15,8 @@ import AccordionList from "./../../components/accordion-list";
 import styles from "./styles";
 import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
 
-type Props = {
-  userName: string
-};
-
-type State = {};
-
-export class HomeScreen extends React.Component<Props, State> {
-  constructor(props: Props) {
+export class HomeScreen extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {};
   }
@@ -52,7 +46,7 @@ export class HomeScreen extends React.Component<Props, State> {
     if (!employee) {
       return (
         <View style={styles.container}>
-          <Text style={styles.welcome}> Error </Text>
+          <Text style={styles.welcome}> Error de inicio de sesión </Text>
           <CustomButton
             title="Volver"
             onClick={this.handleLogout}
@@ -61,7 +55,7 @@ export class HomeScreen extends React.Component<Props, State> {
         </View>
       );
     } else {
-      const { firstName, lastName } = this.props.data.employee;
+      const { firstname, lastname } = this.props.data.employee;
       return (
         <View style={styles.container}>
           <ScrollView>
@@ -69,7 +63,7 @@ export class HomeScreen extends React.Component<Props, State> {
               <View>
                 <Text style={styles.welcome}>Bienvenido</Text>
                 <Text style={styles.welcome}>
-                  {firstName} {lastName}
+                  {firstname} {lastname}
                 </Text>
               </View>
               <View>
@@ -83,7 +77,7 @@ export class HomeScreen extends React.Component<Props, State> {
             <View style={styles.list}>
               <AccordionList
                 sections={this.props.data.employee.shifts}
-                userName={this.props.navigation.state.params.userName}
+                user={this.props.navigation.state.params.user}
               />
             </View>
           </ScrollView>
@@ -94,18 +88,18 @@ export class HomeScreen extends React.Component<Props, State> {
 }
 
 const HOME_QUERY = gql`
-  query employee($userName: String!) {
-    employee(userName: $userName) {
+  query employee($user: String!) {
+    employee(user: $user) {
       id
-      firstName
-      lastName
+      firstname
+      lastname
       shifts {
         id
-        date
-        begin
-        end
+        begindate
+        workspan
+        active
         branch {
-          branchName
+          branch
           address
         }
       }
@@ -115,6 +109,6 @@ const HOME_QUERY = gql`
 
 export default graphql(HOME_QUERY, {
   options: props => ({
-    variables: { userName: props.navigation.state.params.userName }
+    variables: { userName: props.navigation.state.params.user }
   })
 })(HomeScreen);

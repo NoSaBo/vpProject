@@ -1,15 +1,9 @@
-/* @flow */
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import styles from "./styles";
 
-type Props = {
-  name: string,
-  date: string
-};
-
-export default class AccordionHeader extends React.Component<Props> {
+export default class AccordionHeader extends React.Component {
   render() {
     return (
       <View style={styles.headerContainer}>

@@ -1,5 +1,3 @@
-/* @flow */
-
 import React, { Component } from "react";
 import {
   Text,
@@ -26,14 +24,8 @@ const photoOptions = {
   quality: 1
 };
 
-type Props = {};
-
-type State = {
-  user: string
-};
-
-export class ControlSiteScreen extends React.Component<Props, State> {
-  constructor(props: Props) {
+export class ControlSiteScreen extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       user: "",
@@ -61,12 +53,12 @@ export class ControlSiteScreen extends React.Component<Props, State> {
 
   handleButtonClick = () => {
     if (this.state.inPosition) {
-      const { branchName } = this.props.data.serviceShift.branch;
-      const { begin, end } = this.props.data.serviceShift;
+      const { branch } = this.props.data.serviceShift.branch;
+      const { begindate, workspan } = this.props.data.serviceShift;
       this.props.navigation.navigate("EmployeeTab", {
-        branch: branchName,
-        begin: begin,
-        end: end
+        branch: branch,
+        begindate: begindate,
+        workspan: workspan
       });
       navigator.geolocation.clearWatch(this.watchId);
       console.log("cerrado!");
@@ -178,8 +170,8 @@ export class ControlSiteScreen extends React.Component<Props, State> {
       );
     else {
       console.log("DATA LOADED:", this.props.data);
-      const { begin, end } = this.props.data.serviceShift;
-      const { branchName } = this.props.data.serviceShift.branch;
+      const { begindate, workspan } = this.props.data.serviceShift;
+      const { branch } = this.props.data.serviceShift.branch;
       return (
         <View style={styles.container}>
           <ScrollView>
@@ -188,7 +180,7 @@ export class ControlSiteScreen extends React.Component<Props, State> {
                 <Text style={styles.title}>Sede:</Text>
               </View>
               <View>
-                <Text style={styles.content}> {branchName} </Text>
+                <Text style={styles.content}> {branch} </Text>
               </View>
               <View>
                 <Text style={styles.title}>Turno:</Text>
@@ -196,7 +188,7 @@ export class ControlSiteScreen extends React.Component<Props, State> {
               <View>
                 <Text style={styles.content}>
                   {" "}
-                  {begin} {" - "} {end}{" "}
+                  {begindate} {" - "} {workspan}{" "}
                 </Text>
               </View>
             </View>
@@ -238,10 +230,10 @@ export class ControlSiteScreen extends React.Component<Props, State> {
 const SITE_QUERY = gql`
   query serviceShift($id: Int!) {
     serviceShift(id: $id) {
-      begin
-      end
+      begindate
+      workspan
       branch {
-        branchName
+        branch
         latitude
         longitude
       }

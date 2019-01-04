@@ -1,4 +1,3 @@
-/* @flow */
 import React from "react";
 import {
   AsyncStorage,
@@ -18,38 +17,18 @@ import CustomButton from "./../../components/button";
 import styles from "./styles";
 
 const LOG_USER = gql`
-  query login($userName: String!, $password: String!) {
-    login(userName: $userName, password: $password) {
+  query login($user: String!, $password: String!) {
+    login(user: $user, password: $password) {
       id
-      userName
-      firstName
-      lastName
+      user
+      firstname
+      lastname
     }
   }
 `;
 
-// const SET_USER = gql`
-//   mutation setUser(
-//     $userName: String!
-//     $firstName: String!
-//     $lastName: String!
-//   ) {
-//     setUser(userName: $userName, password: $password, lastName: $lastName) {
-//       firstName
-//       lastName
-//     }
-//   }
-// `;
-
-type Props = {};
-
-type State = {
-  user: string,
-  password: string
-};
-
-export default class LoginScreen extends React.Component<Props, State> {
-  constructor(props: Props) {
+export default class LoginScreen extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       user: "",
@@ -57,11 +36,11 @@ export default class LoginScreen extends React.Component<Props, State> {
     };
   }
 
-  handleUser = (text: string) => {
+  handleUser = (text: String) => {
     this.setState({ user: text });
   };
 
-  handlePassword = (text: string) => {
+  handlePassword = (text: String) => {
     this.setState({ password: text });
   };
 
@@ -69,27 +48,11 @@ export default class LoginScreen extends React.Component<Props, State> {
     AsyncStorage.getItem("user").then(value => {
       if (value) {
         this.props.navigation.navigate("Home", {
-          userName: value
+          user: value
         });
       }
     });
   }
-
-  // async handleButtonClick(client) {
-  //   if (!this.state.user) {
-  //     Alert.alert("Login Error", "Debe ingresar un nombre de usuario");
-  //   } else {
-  //     const { data } = await client.query({
-  //       query: LOG_USER,
-  //       variables: { userName: this.state.user, password: this.state.password }
-  //     });
-  //     console.log(data);
-  //     client.writeData({});
-  //     this.props.navigation.navigate("Home", {
-  //       userName: this.state.user
-  //     });
-  //   }
-  // }
 
   render() {
     return (
@@ -98,7 +61,7 @@ export default class LoginScreen extends React.Component<Props, State> {
           <View style={styles.container}>
             <Image
               style={styles.image}
-              source={require("./../../images/logo2.png")}
+              source={require("./../../images/parkeo.png")}
             />
             <Input
               placeholder={"Usuario"}
@@ -115,28 +78,28 @@ export default class LoginScreen extends React.Component<Props, State> {
               onClick={async () => {
                 if (!this.state.user) {
                   Alert.alert(
-                    "Login Error",
+                    "Error de inicio de sesión",
                     "Debe ingresar un nombre de usuario"
                   );
                 } else {
                   const { data } = await client.query({
                     query: LOG_USER,
                     variables: {
-                      userName: this.state.user,
+                      user: this.state.user,
                       password: this.state.password
                     }
                   });
-                  const { userName, firstName, lastName } = data.login;
-                  AsyncStorage.setItem("user", userName);
+                  const { user, firstname, lastname } = data.login;
+                  AsyncStorage.setItem("user", user);
                   client.writeData({
                     data: {
-                      userName: userName,
-                      firstName: firstName,
-                      lastName: lastName
+                      user: user,
+                      firstname: firstname,
+                      lastname: lastname
                     }
                   });
                   this.props.navigation.navigate("Home", {
-                    userName: data.login.userName
+                    user: data.login.user
                   });
                 }
               }}

@@ -1,4 +1,3 @@
-/* @flow */
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Accordion from "react-native-collapsible/Accordion";
@@ -8,12 +7,10 @@ import AccordionContent from "./../accordion-content";
 
 import styles from "./styles";
 
-type Props = {};
-
-export default class AccordionList extends React.Component<Props> {
+export default class AccordionList extends React.Component {
   _renderHeader(section) {
     return (
-      <AccordionHeader name={section.branch.branchName} date={section.date} />
+      <AccordionHeader name={section.branch.branch} date={section.begindate} />
     );
   }
 
@@ -21,8 +18,9 @@ export default class AccordionList extends React.Component<Props> {
     return (
       <AccordionContent
         address={section.branch.address}
-        begin={section.begin}
-        end={section.end}
+        begindate={section.begindate}
+        workspan={section.workspan}
+        active={section.active}
         id={section.id}
       />
     );

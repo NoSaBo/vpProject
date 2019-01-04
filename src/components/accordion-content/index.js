@@ -14,7 +14,7 @@ type Props = {
   end: string
 };
 
-class accordionContent extends React.Component<Props> {
+class accordionContent extends React.Component {
   handleService = () => {
     this.props.navigation.navigate("Site", {
       id: this.props.id
@@ -22,7 +22,7 @@ class accordionContent extends React.Component<Props> {
   };
 
   render() {
-    const { address, begin, end } = this.props;
+    const { address, begindate, workspan, active } = this.props;
     return (
       <View style={styles.container}>
         <View>
@@ -30,7 +30,7 @@ class accordionContent extends React.Component<Props> {
         </View>
         <View>
           <Text style={styles.text}>
-            {begin} - {end}
+            {begindate} - {workspan}
           </Text>
         </View>
         <View>

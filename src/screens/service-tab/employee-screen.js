@@ -1,4 +1,3 @@
-/* @flow */
 import React from "react";
 import { StyleSheet, Text, View, Image, Alert } from "react-native";
 import { gql } from "apollo-boost";
@@ -8,12 +7,8 @@ import Input from "./../../components/input";
 import CustomButton from "./../../components/button";
 import styles from "./styles";
 
-type Props = {};
-
-type State = {};
-
-export class EmployeeScreen extends React.Component<Props, State> {
-  constructor(props: Props) {
+export class EmployeeScreen extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {};
   }
@@ -23,14 +18,9 @@ export class EmployeeScreen extends React.Component<Props, State> {
     this.props.navigation.navigate("Home", {});
   };
 
-  handleAdd = () => {
-    this.props.navigation.navigate("Site");
-  };
-
   render() {
-    const { userName } = this.props.data;
-    console.log("USERNAME", userName);
-    const { branch, begin, end } = this.props.navigation.state.params;
+    const { user } = this.props.data;
+    const { branch, begindate, workspan } = this.props.navigation.state.params;
     return (
       <View style={styles.container}>
         <View style={styles.label}>
@@ -40,7 +30,7 @@ export class EmployeeScreen extends React.Component<Props, State> {
           <View>
             <Text style={styles.content}>
               {" "}
-              {begin} {" - "} {end}{" "}
+              {begindate} {" - "} {workspan}{" "}
             </Text>
           </View>
         </View>
@@ -58,7 +48,7 @@ export class EmployeeScreen extends React.Component<Props, State> {
 
 const SHIFT_QUERY = gql`
   {
-    userName @client
+    user @client
   }
 `;
 
