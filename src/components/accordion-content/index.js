@@ -1,4 +1,3 @@
-/* @flow */
 import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
@@ -7,12 +6,6 @@ import CustomButton from "./../../components/button";
 import styles from "./styles";
 // navigation
 import { withNavigation } from "react-navigation";
-
-type Props = {
-  address: string,
-  begin: string,
-  end: string
-};
 
 class accordionContent extends React.Component {
   handleService = () => {
