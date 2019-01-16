@@ -35,7 +35,7 @@ export class HomeScreen extends React.Component {
   };
 
   render() {
-    const { loading, employee } = this.props.data;
+    const { loading, employees } = this.props.data;
     if (loading) {
       return (
         <View style={styles.container}>
@@ -43,7 +43,7 @@ export class HomeScreen extends React.Component {
         </View>
       );
     }
-    if (!employee) {
+    if (!employees[0]) {
       return (
         <View style={styles.container}>
           <Text style={styles.welcome}> Error de inicio de sesión </Text>
@@ -55,7 +55,16 @@ export class HomeScreen extends React.Component {
         </View>
       );
     } else {
-      const { firstname, lastname } = this.props.data.employee;
+      const { firstname, lastname } = this.props.data.employees[0];
+      const user = this.props.navigation.state.params.user;
+      const sections = this.props.data.employees[0].shifts;
+      // const sections = this.props.data.employees[0].shifts.map(shift => {
+      //   shift.begindate = new Date(shift.begindate);
+      //   shift.workspan = new Date(shift.workspan);
+      // });
+      // sections.sort(function(a, b) {
+      //   return a.begindate.getTime() - b.begindate.getTime();
+      // });
       return (
         <View style={styles.container}>
           <ScrollView>
@@ -75,10 +84,7 @@ export class HomeScreen extends React.Component {
               </View>
             </View>
             <View style={styles.list}>
-              <AccordionList
-                sections={this.props.data.employee.shifts}
-                user={this.props.navigation.state.params.user}
-              />
+              <AccordionList sections={sections} user={user} />
             </View>
           </ScrollView>
         </View>
@@ -88,8 +94,8 @@ export class HomeScreen extends React.Component {
 }
 
 const HOME_QUERY = gql`
-  query employee($user: String!) {
-    employee(user: $user) {
+  query employees($user: String!) {
+    employees(user: $user) {
       id
       firstname
       lastname
@@ -109,6 +115,7 @@ const HOME_QUERY = gql`
 
 export default graphql(HOME_QUERY, {
   options: props => ({
-    variables: { userName: props.navigation.state.params.user }
+    variables: { user: props.navigation.state.params.user },
+    fetchPolicy: "cache-and-network"
   })
 })(HomeScreen);

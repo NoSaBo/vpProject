@@ -87,20 +87,28 @@ export default class LoginScreen extends React.Component {
                     variables: {
                       user: this.state.user,
                       password: this.state.password
-                    }
+                    },
+                    fetchPolicy: "no-cache"
                   });
-                  const { user, firstname, lastname } = data.login;
-                  AsyncStorage.setItem("user", user);
-                  client.writeData({
-                    data: {
-                      user: user,
-                      firstname: firstname,
-                      lastname: lastname
-                    }
-                  });
-                  this.props.navigation.navigate("Home", {
-                    user: data.login.user
-                  });
+                  if (!data.login) {
+                    Alert.alert(
+                      "Error de inicio de sesión",
+                      "El usuario y/o contraseña es inválido"
+                    );
+                  } else {
+                    const { user, firstname, lastname } = data.login;
+                    AsyncStorage.setItem("user", user);
+                    client.writeData({
+                      data: {
+                        user: user,
+                        firstname: firstname,
+                        lastname: lastname
+                      }
+                    });
+                    this.props.navigation.navigate("Home", {
+                      user: data.login.user
+                    });
+                  }
                 }
               }}
               size="Normal"

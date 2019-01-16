@@ -11,18 +11,16 @@ import {
 } from "react-native";
 import { graphql } from "react-apollo";
 import { gql } from "apollo-boost";
-import ImagePicker from "react-native-image-picker";
-import geolib from "geolib";
+import moment from "moment";
+import "moment/locale/es";
 
 import styles from "./styles";
 import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
 
 import Input from "./../../components/input";
 import CustomButton from "./../../components/button";
-
-const photoOptions = {
-  quality: 1
-};
+import controlCamera, { ControlCamera } from "./control-camera";
+import ControlPosition from "./control-position";
 
 export class ControlSiteScreen extends React.Component {
   constructor(props) {
@@ -32,133 +30,41 @@ export class ControlSiteScreen extends React.Component {
       latitude: null,
       longitude: null,
       inPosition: false,
-      alert: "Obteniendo posición GPS",
-      error: null
+      photo: "",
+      comments: ""
     };
   }
 
-  pickImageHandler = () => {
-    ImagePicker.launchCamera(photoOptions, res => {
-      if (res.didCancel) {
-        console.log("User cancelled!");
-      } else if (res.error) {
-        console.log("Error", res.error);
-      } else {
-        this.setState({
-          pickedImage: { uri: res.uri }
-        });
-      }
+  setPhoto(photo) {
+    this.setState({
+      photo: photo
     });
-  };
+  }
+
+  setCoords(latitude, longitude) {
+    this.setState({
+      latitude: latitude,
+      longitude: longitude,
+      inPosition: true
+    });
+  }
 
   handleButtonClick = () => {
-    if (this.state.inPosition) {
-      const { branch } = this.props.data.serviceShift.branch;
-      const { begindate, workspan } = this.props.data.serviceShift;
+    if (
+      this.state.photo &&
+      (this.state.inPosition || this.state.comments != "")
+    ) {
+      const { branch } = this.props.data.serviceShifts[0].branch;
+      const { begindate, workspan } = this.props.data.serviceShifts[0];
       this.props.navigation.navigate("EmployeeTab", {
         branch: branch,
         begindate: begindate,
         workspan: workspan
       });
-      navigator.geolocation.clearWatch(this.watchId);
-      console.log("cerrado!");
+    } else if (!this.state.photo) {
+      Alert.alert("Foto Error", "Debes tomar una foto");
     } else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");
   };
-
-  // Permissions
-  async requestGPSPermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: "Aplicación VP",
-          message: "Esta aplicación necesita acceder a su posición"
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the location");
-      } else {
-        console.log("location permission denied");
-        alert("No podra acceder a sus turnos");
-      }
-    } catch (err) {
-      console.warn("err:", err);
-    }
-  }
-
-  async requestCameraPermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: "Aplicación VP",
-          message: "Esta aplicación necesita acceder a su cámara"
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the camera");
-      } else {
-        console.log("camera permission denied");
-        alert("No podra acceder a sus turnos");
-      }
-    } catch (err) {
-      console.warn("err:", err);
-    }
-  }
-
-  async componentWillMount() {
-    await this.requestGPSPermission();
-    await this.requestCameraPermission();
-  }
-
-  componentDidMount() {
-    // const { loading, error } = this.props.data;
-    console.log("INICIATE LOCATION");
-    this.watchId = navigator.geolocation.watchPosition(
-      position => {
-        console.log("POSITION COORDS", position.coords);
-        this.setState({
-          error: null,
-          alert: "Obteniendo posición"
-        });
-        const { latitude, longitude } = this.props.data.serviceShift.branch;
-        const distance = geolib.getDistance(
-          position.coords,
-          {
-            latitude: latitude,
-            longitude: longitude
-          },
-          1,
-          1
-        );
-        console.log("DISTANCE", distance);
-        if (distance < 50) {
-          this.setState({
-            inPosition: true,
-            alert: "Estas en el perimetro de la sede",
-            error: null
-          });
-        } else {
-          this.setState({
-            inPosition: false,
-            alert: "No estas en el perimetro de la sede"
-          });
-        }
-      },
-      error => this.setState({ error: error.message }),
-      {
-        enableHighAccuracy: true,
-        timeout: 20000,
-        maximumAge: 1000,
-        distanceFilter: 10
-      }
-    );
-  }
-
-  componentWillUnmount() {
-    navigator.geolocation.clearWatch(this.watchId);
-    console.log("cerrado!");
-  }
 
   render() {
     const { loading, error } = this.props.data;
@@ -170,8 +76,7 @@ export class ControlSiteScreen extends React.Component {
       );
     else {
       console.log("DATA LOADED:", this.props.data);
-      const { begindate, workspan } = this.props.data.serviceShift;
-      const { branch } = this.props.data.serviceShift.branch;
+      const { begindate, workspan, branch } = this.props.data.serviceShifts[0];
       return (
         <View style={styles.container}>
           <ScrollView>
@@ -180,40 +85,25 @@ export class ControlSiteScreen extends React.Component {
                 <Text style={styles.title}>Sede:</Text>
               </View>
               <View>
-                <Text style={styles.content}> {branch} </Text>
+                <Text style={styles.content}> {branch.branch} </Text>
               </View>
               <View>
                 <Text style={styles.title}>Turno:</Text>
               </View>
               <View>
                 <Text style={styles.content}>
-                  {" "}
-                  {begindate} {" - "} {workspan}{" "}
+                  {moment(begindate).format("HH:mm")} -{" "}
+                  {moment("2012-07-14T" + workspan).format("HH:mm")}
                 </Text>
               </View>
             </View>
-            <View style={styles.block}>
-              <Image
-                style={styles.image}
-                source={
-                  this.state.pickedImage
-                    ? this.state.pickedImage
-                    : require("./../../images/manPhoto.png")
-                }
-                resizeMode="contain"
-              />
-              <CustomButton
-                title="Capturar foto"
-                onClick={this.pickImageHandler}
-                size="Normal"
-              />
-            </View>
+            <ControlCamera setPhoto={photo => this.setPhoto(photo)} />
             <View style={styles.access}>
-              <View>
-                <Text style={this.state.inPosition ? styles.green : styles.red}>
-                  {this.state.alert}
-                </Text>
-              </View>
+              <ControlPosition
+                setCoords={(lat, long) => this.setCoords(lat, long)}
+                latitude={branch.latitude}
+                longitude={branch.longitude}
+              />
               <CustomButton
                 title="Iniciar Turno"
                 onClick={this.handleButtonClick}
@@ -228,8 +118,8 @@ export class ControlSiteScreen extends React.Component {
 }
 
 const SITE_QUERY = gql`
-  query serviceShift($id: Int!) {
-    serviceShift(id: $id) {
+  query serviceShifts($id: ID!) {
+    serviceShifts(id: $id) {
       begindate
       workspan
       branch {

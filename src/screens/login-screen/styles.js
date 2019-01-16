@@ -13,7 +13,7 @@ export default StyleSheet.create({
   },
   image: {
     width: 200,
-    height: 150,
+    height: 200,
     margin: 10
   }
 });

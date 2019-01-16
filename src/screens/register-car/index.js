@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
   ImageBackground,
+  TouchableHighlight,
   ActivityIndicator,
   Alert,
   PermissionsAndroid
@@ -92,27 +93,26 @@ export class RegisterScreen extends React.Component {
               handleInput={this.handlePassword}
               secure={false}
             />
-            <View style={styles.block}>
-              <ImageBackground
-                resizeMode={"contain"}
-                imageStyle={{ width: 300, height: 200 }}
-                style={{ width: 300, height: 200 }}
-                source={require("./../../images/car.jpg")}
-              >
-                <Image
+            <TouchableHighlight
+              style={styles.block}
+              onPress={() => this.setModalReportVisible(true)}
+            >
+              <View>
+                <ImageBackground
                   resizeMode={"contain"}
-                  style={{ flex: 1 }}
-                  source={{ uri: this.state.damage }}
-                />
-              </ImageBackground>
-            </View>
-            <CustomButton
-              title="Registrar daños"
-              onClick={() => {
-                this.setModalReportVisible(true);
-              }}
-              size="Small"
-            />
+                  imageStyle={{ width: 300, height: 200 }}
+                  style={{ width: 300, height: 200 }}
+                  source={require("./../../images/car.jpg")}
+                >
+                  <Image
+                    resizeMode={"contain"}
+                    style={{ flex: 1 }}
+                    source={{ uri: this.state.damage }}
+                  />
+                </ImageBackground>
+              </View>
+            </TouchableHighlight>
+
             <Modal
               animationType="slide"
               supportedOrientations={["landscape"]}
@@ -124,32 +124,31 @@ export class RegisterScreen extends React.Component {
             >
               <Signature handle={this.handleDamage} signature={false} />
             </Modal>
-            <View style={styles.block}>
-              <ImageBackground
-                resizeMode={"contain"}
-                imageStyle={{
-                  width: 300,
-                  height: 200
-                }}
-                style={{ width: 300, height: 200, backgroundColor: "white" }}
-                // source={{
-                //   uri: ""
-                // }}
-              >
-                <Image
+            <TouchableHighlight
+              onPress={() => this.setModalSignVisible(true)}
+              style={styles.block}
+            >
+              <View>
+                <ImageBackground
                   resizeMode={"contain"}
-                  style={{ flex: 1 }}
-                  source={{ uri: this.state.signature }}
-                />
-              </ImageBackground>
-            </View>
-            <CustomButton
-              title="Registrar Firma"
-              onClick={() => {
-                this.setModalSignVisible(true);
-              }}
-              size="Small"
-            />
+                  imageStyle={{
+                    width: 300,
+                    height: 200
+                  }}
+                  style={{ width: 300, height: 200, backgroundColor: "white" }}
+                  // source={{
+                  //   uri: ""
+                  // }}
+                >
+                  <Image
+                    resizeMode={"contain"}
+                    style={{ flex: 1 }}
+                    source={{ uri: this.state.signature }}
+                  />
+                </ImageBackground>
+              </View>
+            </TouchableHighlight>
+
             <Modal
               animationType="slide"
               supportedOrientations={["landscape"]}
@@ -161,6 +160,7 @@ export class RegisterScreen extends React.Component {
             >
               <Signature handle={this.handleSignature} signature={true} />
             </Modal>
+
             <CustomButton
               title="Entregar Vehículo"
               onClick={() => {

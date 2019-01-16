@@ -11,6 +11,7 @@
     "apollo-link-state": "^0.4.2",
     "geolib": "^2.0.24",
     "graphql": "^14.0.0",
+    "moment": "^2.23.0",
     "react": "16.4.1",
     "react-apollo": "^2.1.11",
     "react-dom": "16.6.3",

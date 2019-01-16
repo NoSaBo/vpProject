@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 import CustomButton from "./../../components/button";
+import moment from "moment";
+import "moment/locale/es";
 
 import styles from "./styles";
 // navigation
@@ -23,7 +25,8 @@ class accordionContent extends React.Component {
         </View>
         <View>
           <Text style={styles.text}>
-            {begindate} - {workspan}
+            {moment(begindate).format("HH:mm")} -{" "}
+            {moment("2012-07-14T" + workspan).format("HH:mm")}
           </Text>
         </View>
         <View>
