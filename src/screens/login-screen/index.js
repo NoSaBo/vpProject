@@ -36,11 +36,11 @@ export default class LoginScreen extends React.Component {
     };
   }
 
-  handleUser = (text: String) => {
+  handleUser = text => {
     this.setState({ user: text });
   };
 
-  handlePassword = (text: String) => {
+  handlePassword = text => {
     this.setState({ password: text });
   };
 
@@ -96,8 +96,8 @@ export default class LoginScreen extends React.Component {
                       "El usuario y/o contraseña es inválido"
                     );
                   } else {
-                    const { user, firstname, lastname } = data.login;
-                    AsyncStorage.setItem("user", user);
+                    const { id, user, firstname, lastname } = data.login;
+                    AsyncStorage.multiSet([["userid", id], ["user", user]]);
                     client.writeData({
                       data: {
                         user: user,

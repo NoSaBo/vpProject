@@ -34,6 +34,20 @@ export class HomeScreen extends React.Component {
     if (this.removeItemValue("user")) this.props.navigation.navigate("Login");
   };
 
+  componentDidMount() {
+    AsyncStorage.multiGet(["shiftid", "branch", "begindate", "workspan"]).then(
+      value => {
+        if (value[0][1]) {
+          this.props.navigation.navigate("EmployeeTab", {
+            branch: value[1][1],
+            begindate: value[2][1],
+            workspan: value[3][1]
+          });
+        }
+      }
+    );
+  }
+
   render() {
     const { loading, employees } = this.props.data;
     if (loading) {
@@ -43,7 +57,7 @@ export class HomeScreen extends React.Component {
         </View>
       );
     }
-    if (!employees[0]) {
+    if (!employees) {
       return (
         <View style={styles.container}>
           <Text style={styles.welcome}> Error de inicio de sesión </Text>
@@ -55,9 +69,9 @@ export class HomeScreen extends React.Component {
         </View>
       );
     } else {
-      const { firstname, lastname } = this.props.data.employees[0];
+      const { firstname, lastname } = employees[0];
       const user = this.props.navigation.state.params.user;
-      const sections = this.props.data.employees[0].shifts;
+      const sections = employees[0].shifts;
       // const sections = this.props.data.employees[0].shifts.map(shift => {
       //   shift.begindate = new Date(shift.begindate);
       //   shift.workspan = new Date(shift.workspan);

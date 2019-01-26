@@ -67,7 +67,7 @@ const ControlStack = createStackNavigator(
   {
     Home: { screen: HomeScreen },
     Site: ControlSiteScreen,
-    Service: ServiceStack
+    ServiceStack: ServiceStack
   },
   {
     initialRouteName: "Home",

@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, Alert } from "react-native";
+import {
+  AsyncStorage,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Alert
+} from "react-native";
 import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 
@@ -14,7 +21,11 @@ export default class ServiceScreen extends React.Component {
   }
 
   handleRegister = () => {
-    this.props.navigation.navigate("Register");
+    AsyncStorage.getItem("shiftid").then(value => {
+      if (value) {
+        this.props.navigation.navigate("Register", { shiftid: value });
+      }
+    });
   };
 
   handleReturn = () => {};

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {
+  AsyncStorage,
   Text,
   View,
   TextInput,
@@ -50,20 +51,27 @@ export class ControlSiteScreen extends React.Component {
   }
 
   handleButtonClick = () => {
-    if (
-      this.state.photo &&
-      (this.state.inPosition || this.state.comments != "")
-    ) {
-      const { branch } = this.props.data.serviceShifts[0].branch;
-      const { begindate, workspan } = this.props.data.serviceShifts[0];
-      this.props.navigation.navigate("EmployeeTab", {
-        branch: branch,
-        begindate: begindate,
-        workspan: workspan
-      });
-    } else if (!this.state.photo) {
-      Alert.alert("Foto Error", "Debes tomar una foto");
-    } else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");
+    // if (
+    //   this.state.photo &&
+    //   (this.state.inPosition || this.state.comments != "")
+    // ) {
+    const { branch } = this.props.data.serviceShifts[0].branch;
+    const { begindate, workspan } = this.props.data.serviceShifts[0];
+    const id = this.props.navigation.state.params.id;
+    AsyncStorage.multiSet([
+      ["shiftid", id],
+      ["branch", branch],
+      ["begindate", begindate],
+      ["workspan", workspan]
+    ]);
+    this.props.navigation.navigate("EmployeeTab", {
+      branch: branch,
+      begindate: begindate,
+      workspan: workspan
+    });
+    // } else if (!this.state.photo) {
+    //   Alert.alert("Foto Error", "Debes tomar una foto");
+    // } else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");
   };
 
   render() {
@@ -93,7 +101,7 @@ export class ControlSiteScreen extends React.Component {
               <View>
                 <Text style={styles.content}>
                   {moment(begindate).format("HH:mm")} -{" "}
-                  {moment("2012-07-14T" + workspan).format("HH:mm")}
+                  {moment(workspan).format("HH:mm")}
                 </Text>
               </View>
             </View>

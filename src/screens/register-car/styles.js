@@ -26,6 +26,16 @@ export default StyleSheet.create({
     borderColor: COLOR_BASE,
     padding: 6
   },
+  modal: {
+    width: 300,
+    height: 260,
+    borderRadius: 10,
+    borderWidth: 0,
+    backgroundColor: COLOR_BASE,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10
+  },
   access: {
     height: 170,
     backgroundColor: COLOR_BASE,

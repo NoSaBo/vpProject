@@ -26,7 +26,7 @@ class accordionContent extends React.Component {
         <View>
           <Text style={styles.text}>
             {moment(begindate).format("HH:mm")} -{" "}
-            {moment("2012-07-14T" + workspan).format("HH:mm")}
+            {moment(workspan).format("HH:mm")}
           </Text>
         </View>
         <View>

@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, Alert } from "react-native";
+import {
+  AsyncStorage,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Alert
+} from "react-native";
 import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 
@@ -15,9 +22,18 @@ export class EmployeeScreen extends React.Component {
     this.state = {};
   }
 
+  async removeItemValues(keys) {
+    try {
+      await AsyncStorage.multiRemove(keys);
+      return true;
+    } catch (exception) {
+      return false;
+    }
+  }
+
   handleLogout = () => {
-    // this.props.navigation.popToTop("Home");
-    this.props.navigation.navigate("Home", {});
+    if (this.removeItemValues(["shiftid", "branch", "begindate", "workspan"]))
+      this.props.navigation.navigate("Home", {});
   };
 
   render() {
@@ -31,8 +47,11 @@ export class EmployeeScreen extends React.Component {
           </View>
           <View>
             <Text style={styles.content}>
+              {moment(begindate).format("DD [de] MMMM")}
+            </Text>
+            <Text style={styles.content}>
               {moment(begindate).format("HH:mm")} -{" "}
-              {moment("2012-07-14T" + workspan).format("HH:mm")}
+              {moment(workspan).format("HH:mm")}
             </Text>
           </View>
         </View>
