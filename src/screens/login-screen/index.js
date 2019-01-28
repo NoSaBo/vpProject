@@ -67,11 +67,13 @@ export default class LoginScreen extends React.Component {
               placeholder={"Usuario"}
               handleInput={this.handleUser}
               secure={false}
+              capitalize={false}
             />
             <Input
               placeholder={"Contraseña"}
               handleInput={this.handlePassword}
               secure={true}
+              capitalize={false}
             />
             <CustomButton
               title="Iniciar"

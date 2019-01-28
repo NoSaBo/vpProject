@@ -17,29 +17,45 @@ import styles from "./styles";
 export default class ServiceScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      shiftid: ""
+    };
+  }
+
+  componentDidMount() {
+    AsyncStorage.getItem("shiftid").then(value => {
+      if (value) {
+        this.setState({ shiftid: value });
+      }
+    });
   }
 
   handleRegister = () => {
-    AsyncStorage.getItem("shiftid").then(value => {
-      if (value) {
-        this.props.navigation.navigate("Register", { shiftid: value });
-      }
-    });
+    if (this.state.shiftid) {
+      this.props.navigation.navigate("Register", {
+        shiftid: this.state.shiftid
+      });
+    }
   };
 
-  handleReturn = () => {};
+  handleReturn = () => {
+    if (this.state.shiftid) {
+      this.props.navigation.navigate("Return", {
+        shiftid: this.state.shiftid
+      });
+    }
+  };
 
   render() {
     return (
       <View style={styles.container}>
         <CustomButton
-          title="Registrar Vehiculo"
+          title="Registrar"
           onClick={this.handleRegister}
           size="Large"
         />
         <CustomButton
-          title="Devolver Vehiculo"
+          title="Devolver"
           onClick={this.handleReturn}
           size="Large"
         />

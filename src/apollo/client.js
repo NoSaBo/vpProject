@@ -6,7 +6,8 @@ import { ApolloLink } from "apollo-link";
 import { reducer } from "./reducer";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql"
+  // uri: "http://localhost:4000/graphql"
+  uri: "http://192.168.0.63:4000/graphql"
   // uri: "http://vp-project.herokuapp.com/graphql"
 });
 
@@ -58,7 +59,6 @@ const stateLink = withClientState({
 export const client = new ApolloClient({
   cache,
   link: ApolloLink.from([stateLink, httpLink])
-  // link: stateLink.concat(httpLink)
 });
 
 const logout = client.onResetStore(stateLink.writeDefaults);

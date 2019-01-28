@@ -11,6 +11,7 @@ import ControlSiteScreen from "./screens/controlSite-screen/index";
 import EmployeeScreen from "./screens/service-tab/employee-screen";
 import ServiceScreen from "./screens/service-tab/service-screen";
 import RegisterScreen from "./screens/register-car/index";
+import ReturnScreen from "./screens/return-car/index";
 
 import { COLOR_PRIMARY, COLOR_BASE } from "./common";
 
@@ -54,7 +55,8 @@ const ServiceTabs = createMaterialTopTabNavigator(
 const ServiceStack = createStackNavigator(
   {
     Service: ServiceTabs,
-    Register: RegisterScreen
+    Register: RegisterScreen,
+    Return: ReturnScreen
   },
   {
     initialRouteName: "Service",

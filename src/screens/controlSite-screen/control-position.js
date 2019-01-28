@@ -43,10 +43,8 @@ export class ControlPosition extends React.Component {
   }
 
   componentDidMount() {
-    console.log("INICIATE LOCATION");
     this.watchId = navigator.geolocation.watchPosition(
       position => {
-        console.log("POSITION COORDS", position.coords);
         this.setState({
           error: null,
           alert: "Obteniendo posición"

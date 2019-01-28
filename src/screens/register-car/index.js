@@ -14,7 +14,7 @@ import {
   PermissionsAndroid
 } from "react-native";
 import { Mutation, graphql } from "react-apollo";
-import { gql } from "apollo-boost";
+import gql from "graphql-tag";
 
 import styles from "./styles";
 import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
@@ -27,17 +27,19 @@ export class RegisterScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      plate: null,
-      owner: null,
+      plate: "",
+      owner: "",
       values: [
         { type: "Joyas", selected: false },
         { type: "Portatil", selected: false },
         { type: "Dinero", selected: false }
       ],
-      comments: null,
+      comments: "",
       signature: null,
+      signUrl: "",
       damage: null,
-      token: null,
+      damageUrl: "",
+      token: "",
       modalSign: false,
       modalReport: false,
       modalValues: false
@@ -103,6 +105,7 @@ export class RegisterScreen extends React.Component {
               placeholder={"Nro de placa"}
               handleInput={this.handlePlate}
               secure={false}
+              capitalize={true}
             />
 
             <Text style={styles.content}>Propietario</Text>
@@ -110,6 +113,7 @@ export class RegisterScreen extends React.Component {
               placeholder={"Nombre del cliente"}
               handleInput={this.handleOwner}
               secure={false}
+              capitalize={false}
             />
 
             <TouchableHighlight
@@ -200,6 +204,7 @@ export class RegisterScreen extends React.Component {
               placeholder={"Token*"}
               handleInput={this.handleToken}
               secure={false}
+              capitalize={false}
             />
 
             <TouchableHighlight
@@ -237,31 +242,30 @@ export class RegisterScreen extends React.Component {
             </Modal>
 
             <Mutation mutation={NEW_PARKING}>
-              {newParking => {
+              {addParking => {
                 let newValues = [];
-                const test = "";
                 this.state.values.map(value => {
                   if (value.selected) newValues.push(value.type);
                 });
+                const parking = {
+                  plate: this.state.plate,
+                  owner: this.state.owner,
+                  values: newValues,
+                  comment: this.state.comments,
+                  damage: this.state.damageUrl,
+                  sign: this.state.signUrl,
+                  token: this.state.token,
+                  serviceshiftId: this.props.navigation.state.params.shiftid
+                };
                 return (
                   <CustomButton
                     title="Entregar Vehículo"
                     onClick={() => {
-                      newParking({
-                        variables: {
-                          plate: this.state.plate,
-                          owner: this.state.owner,
-                          values: test,
-                          comment: this.state.comments,
-                          damage: this.state.damage,
-                          sign: this.state.signature,
-                          token: this.state.token,
-                          returned: false,
-                          serviceshiftId: this.props.navigation.state.params
-                            .shiftid
-                        }
-                      });
-                      this.props.navigation.navigate("ServiceTab");
+                      addParking({
+                        variables: parking
+                      }).then(() =>
+                        this.props.navigation.navigate("ServiceTab")
+                      );
                     }}
                     size="Normal"
                   />
@@ -278,13 +282,12 @@ export class RegisterScreen extends React.Component {
 export const NEW_PARKING = gql`
   mutation addParking(
     $plate: String!
-    $owner: String
-    $values: String
-    $comment: String
-    $damage: String
-    $sign: String
+    $owner: String!
+    $values: [String!]
+    $comment: String!
+    $damage: String!
+    $sign: String!
     $token: String!
-    $returned: Boolean!
     $serviceshiftId: ID!
   ) {
     addParking(
@@ -295,7 +298,6 @@ export const NEW_PARKING = gql`
       damage: $damage
       sign: $sign
       token: $token
-      returned: $returned
       serviceshiftId: $serviceshiftId
     ) {
       id
