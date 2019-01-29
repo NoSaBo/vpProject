@@ -76,23 +76,20 @@ export class ControlSiteScreen extends React.Component {
         serviceShiftId: id
       };
       console.log("VARIABLES!: ", variables);
-      attendance({ variables: variables }).then(
-        data => {
-          console.log("DATAAAAAA: ", data);
-        },
-        error => console.log("PTMR: ", error)
-      );
-      AsyncStorage.multiSet([
-        ["shiftid", id],
-        ["branch", branch],
-        ["begindate", begindate],
-        ["workspan", workspan]
-      ]);
-      // this.props.navigation.navigate("EmployeeTab", {
-      //   branch: branch,
-      //   begindate: begindate,
-      //   workspan: workspan
-      // });
+      attendance({ variables: variables }).then(data => {
+        console.log("DATAAAAAA: ", data);
+        AsyncStorage.multiSet([
+          ["shiftid", id],
+          ["branch", branch],
+          ["begindate", begindate],
+          ["workspan", workspan]
+        ]);
+        this.props.navigation.navigate("EmployeeTab", {
+          branch: branch,
+          begindate: begindate,
+          workspan: workspan
+        });
+      });
     } else if (!this.state.photo) {
       Alert.alert("Foto Error", "Debes tomar una foto");
     } else Alert.alert("GPS Error", "No estas dentro del perimetro de la sede");

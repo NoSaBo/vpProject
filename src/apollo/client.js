@@ -7,8 +7,8 @@ import { reducer } from "./reducer";
 
 const httpLink = createHttpLink({
   // uri: "http://localhost:4000/graphql"
-  uri: "http://192.168.0.63:4000/graphql"
-  // uri: "http://vp-project.herokuapp.com/graphql"
+  // uri: "http://192.168.0.63:4000/graphql"
+  uri: "http://vp-project.herokuapp.com/graphql"
 });
 
 const defaults = {
