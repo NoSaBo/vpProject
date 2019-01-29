@@ -16,6 +16,8 @@ import {
 import { Mutation, graphql } from "react-apollo";
 import gql from "graphql-tag";
 
+import Orientation from "react-native-orientation";
+
 import styles from "./styles";
 import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
 
@@ -72,6 +74,12 @@ export class RegisterScreen extends React.Component {
 
   setModalReportVisible(visible) {
     this.setState({ modalReport: visible });
+    if (visible) {
+      Orientation.lockToLandscape();
+    } else {
+      Orientation.lockToPortrait();
+      Orientation.unlockAllOrientations();
+    }
   }
 
   setModalValuesVisible(visible) {
@@ -92,7 +100,6 @@ export class RegisterScreen extends React.Component {
     let newValues = [...this.state.values];
     newValues[index].selected = !newValues[index].selected;
     this.setState({ values: newValues });
-    this.setModalReportVisible(false);
   };
 
   render() {
