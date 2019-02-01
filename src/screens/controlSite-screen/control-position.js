@@ -18,29 +18,29 @@ export class ControlPosition extends React.Component {
   }
 
   // Permissions
-  async requestGPSPermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: "Aplicación VP",
-          message: "Esta aplicación necesita acceder a su posición"
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the location");
-      } else {
-        console.log("location permission denied");
-        alert("No podra acceder a sus turnos");
-      }
-    } catch (err) {
-      console.warn("err:", err);
-    }
-  }
+  // async requestGPSPermission() {
+  //   try {
+  //     const granted = await PermissionsAndroid.request(
+  //       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  //       {
+  //         title: "Aplicación VP",
+  //         message: "Esta aplicación necesita acceder a su posición"
+  //       }
+  //     );
+  //     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //       console.log("You can use the location");
+  //     } else {
+  //       console.log("location permission denied");
+  //       alert("No podra acceder a sus turnos");
+  //     }
+  //   } catch (err) {
+  //     console.warn("err:", err);
+  //   }
+  // }
 
-  async componentWillMount() {
-    await this.requestGPSPermission();
-  }
+  // async componentWillMount() {
+  //   await this.requestGPSPermission();
+  // }
 
   componentDidMount() {
     this.watchId = navigator.geolocation.watchPosition(

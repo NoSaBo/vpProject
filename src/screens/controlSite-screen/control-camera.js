@@ -42,29 +42,29 @@ export class ControlCamera extends React.Component {
   };
 
   // Permissions
-  async requestCameraPermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: "Aplicación VP",
-          message: "Esta aplicación necesita acceder a su cámara"
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the camera");
-      } else {
-        console.log("camera permission denied");
-        alert("No podra acceder a sus turnos");
-      }
-    } catch (err) {
-      console.warn("err:", err);
-    }
-  }
+  // async requestCameraPermission() {
+  //   try {
+  //     const granted = await PermissionsAndroid.request(
+  //       PermissionsAndroid.PERMISSIONS.CAMERA,
+  //       {
+  //         title: "Aplicación VP",
+  //         message: "Esta aplicación necesita acceder a su cámara"
+  //       }
+  //     );
+  //     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //       console.log("You can use the camera");
+  //     } else {
+  //       console.log("camera permission denied");
+  //       alert("No podra acceder a sus turnos");
+  //     }
+  //   } catch (err) {
+  //     console.warn("err:", err);
+  //   }
+  // }
 
-  async componentWillMount() {
-    await this.requestCameraPermission();
-  }
+  // async componentWillMount() {
+  //   await this.requestCameraPermission();
+  // }
 
   render() {
     return (
