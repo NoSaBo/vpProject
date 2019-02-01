@@ -7,6 +7,9 @@ import {
   Image,
   Alert
 } from "react-native";
+import { Button } from "react-native-elements";
+import Icon from "react-native-vector-icons/FontAwesome";
+
 import { gql } from "apollo-boost";
 import { graphql } from "react-apollo";
 

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { ThemeProvider } from "react-native-elements";
 import {
   Platform,
   StyleSheet,
@@ -12,6 +13,12 @@ import { client } from "./apollo/client";
 
 import RootSwitch from "./routes";
 
+const theme = {
+  Button: {
+    raised: true
+  }
+};
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +27,9 @@ export default class App extends Component {
   render() {
     return (
       <ApolloProvider client={client}>
-        <RootSwitch />
+        <ThemeProvider theme={theme}>
+          <RootSwitch />
+        </ThemeProvider>
       </ApolloProvider>
     );
   }

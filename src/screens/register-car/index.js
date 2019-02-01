@@ -3,9 +3,7 @@ import {
   Modal,
   Text,
   View,
-  TextInput,
   ScrollView,
-  CheckBox,
   Image,
   ImageBackground,
   TouchableHighlight,
@@ -13,6 +11,8 @@ import {
   Alert,
   PermissionsAndroid
 } from "react-native";
+import { Overlay, CheckBox, Input, Button, Icon } from "react-native-elements";
+
 import { Mutation, graphql } from "react-apollo";
 import gql from "graphql-tag";
 
@@ -21,7 +21,7 @@ import Orientation from "react-native-orientation";
 import styles from "./styles";
 import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
 
-import Input from "./../../components/input";
+// import Input from "./../../components/input";
 import CustomButton from "./../../components/button";
 import Signature from "./../../components/signature-canvas";
 
@@ -107,72 +107,59 @@ export class RegisterScreen extends React.Component {
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.block}>
-            <Text style={styles.content}>Placa*</Text>
             <Input
-              placeholder={"Nro de placa"}
-              handleInput={this.handlePlate}
-              secure={false}
-              capitalize={true}
+              placeholder={"Placa*"}
+              leftIcon={{ type: "font-awesome", name: "car" }}
+              onChangeText={this.handlePlate}
+              autoCapitalize="characters"
             />
-
-            <Text style={styles.content}>Propietario</Text>
             <Input
-              placeholder={"Nombre del cliente"}
-              handleInput={this.handleOwner}
-              secure={false}
-              capitalize={false}
+              placeholder={"Propietario"}
+              leftIcon={{ type: "font-awesome", name: "user" }}
+              onChangeText={this.handleOwner}
             />
-
-            <TouchableHighlight
-              // style={styles.block}
+            <Input
+              placeholder={"Token*"}
+              leftIcon={{ type: "font-awesome", name: "key" }}
+              onChangeText={this.handleToken}
+              autoCapitalize="none"
+            />
+            <Button
+              title="Objetos de valor"
+              icon={<Icon name="add-circle-outline" size={15} />}
+              type="clear"
               onPress={() => this.setModalValuesVisible(true)}
-            >
-              <Text style={styles.content}>Objetos de valor</Text>
-            </TouchableHighlight>
+            />
 
-            <Modal
-              animationType="slide"
-              supportedOrientations={["landscape"]}
-              transparent={true}
-              visible={this.state.modalValues}
-              onRequestClose={() => {
+            <Overlay
+              isVisible={this.state.modalValues}
+              onBackdropPress={() => {
                 this.setModalValuesVisible(false);
               }}
             >
-              <View style={{ flex: 1 }}>
-                <View style={styles.modal}>
-                  {this.state.values.map((value, index) => {
-                    return (
-                      <View style={{ flexDirection: "row" }} key={value.type}>
-                        <CheckBox
-                          value={value.selected}
-                          onValueChange={() => this.ValueChange(index)}
-                        />
-                        <Text style={{ marginTop: 5 }}>{value.type}</Text>
-                      </View>
-                    );
-                  })}
-
-                  <View style={styles.block}>
-                    <TextInput
-                      style={{
-                        width: 180,
-                        height: 80,
-                        borderColor: "gray",
-                        borderWidth: 0.5
-                      }}
-                      multiline={true}
-                      numberOfLines={4}
-                      editable={true}
-                      maxLength={40}
-                      placeholder={"Comentarios..."}
-                      onChangeText={this.handleComments}
-                      value={this.state.comments}
+              <View>
+                {this.state.values.map((value, index) => {
+                  return (
+                    <CheckBox
+                      key={value.type}
+                      center
+                      title={value.type}
+                      checked={value.selected}
+                      onPress={() => this.ValueChange(index)}
                     />
-                  </View>
-                </View>
+                  );
+                })}
+                <Input
+                  multiline={true}
+                  editable={true}
+                  maxLength={60}
+                  placeholder="Comentarios..."
+                  onChangeText={this.handleComments}
+                  value={this.state.comments}
+                  shake={true}
+                />
               </View>
-            </Modal>
+            </Overlay>
 
             <TouchableHighlight
               style={styles.block}
@@ -206,17 +193,9 @@ export class RegisterScreen extends React.Component {
               <Signature handle={this.handleDamage} signature={false} />
             </Modal>
 
-            <Text style={styles.content}>Token</Text>
-            <Input
-              placeholder={"Token*"}
-              handleInput={this.handleToken}
-              secure={false}
-              capitalize={false}
-            />
-
             <TouchableHighlight
-              onPress={() => this.setModalSignVisible(true)}
               style={styles.block}
+              onPress={() => this.setModalSignVisible(true)}
             >
               <View>
                 <ImageBackground
@@ -265,16 +244,16 @@ export class RegisterScreen extends React.Component {
                   serviceshiftId: this.props.navigation.state.params.shiftid
                 };
                 return (
-                  <CustomButton
+                  <Button
                     title="Entregar Vehículo"
-                    onClick={() => {
+                    icon={<Icon name="check" size={15} />}
+                    onPress={() => {
                       addParking({
                         variables: parking
                       }).then(() =>
                         this.props.navigation.navigate("ServiceTab")
                       );
                     }}
-                    size="Normal"
                   />
                 );
               }}
