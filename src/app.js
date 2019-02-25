@@ -10,14 +10,9 @@ import {
 } from "react-native";
 import { ApolloProvider } from "react-apollo";
 import { client } from "./apollo/client";
+import theme from "./theme";
 
 import RootSwitch from "./routes";
-
-const theme = {
-  Button: {
-    raised: true
-  }
-};
 
 export default class App extends Component {
   constructor(props) {

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   AsyncStorage,
-  Text,
   View,
   TextInput,
   ScrollView,
@@ -10,16 +9,27 @@ import {
   Alert,
   PermissionsAndroid
 } from "react-native";
+import {
+  Card,
+  Button,
+  Input,
+  Icon,
+  Text,
+  ListItem
+} from "react-native-elements";
 import { Mutation, graphql } from "react-apollo";
 import gql from "graphql-tag";
 import moment from "moment";
 import "moment/locale/es";
 
 import styles from "./styles";
-import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
+import {
+  COLOR_ALERT,
+  COLOR_SECONDARY,
+  COLOR_BASE,
+  COLOR_PRIMARY
+} from "./../../common";
 
-import Input from "./../../components/input";
-import CustomButton from "./../../components/button";
 import controlCamera, { ControlCamera } from "./control-camera";
 import ControlPosition from "./control-position";
 
@@ -27,6 +37,7 @@ export class ControlSiteScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       user: "",
       userid: "",
       latitude: null,
@@ -36,54 +47,29 @@ export class ControlSiteScreen extends React.Component {
       comments: ""
     };
   }
-  // Permision for Camera and GPS
-  async componentWillMount() {
-    await this.requestGPSPermission();
-    await this.requestCameraPermission();
-  }
 
-  async requestGPSPermission() {
+  async requestPermissions() {
     try {
-      const granted = await PermissionsAndroid.request(
+      const granted = await PermissionsAndroid.requestMultiple([
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: "Aplicación VP",
-          message: "Esta aplicación necesita acceder a su posición"
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the location");
-      } else {
-        console.log("location permission denied");
-        alert("No podra acceder a sus turnos");
-      }
-    } catch (err) {
-      console.warn("err:", err);
-    }
-  }
-
-  async requestCameraPermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: "Aplicación VP",
-          message: "Esta aplicación necesita acceder a su cámara"
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the camera");
-      } else {
-        console.log("camera permission denied");
-        alert("No podra acceder a sus turnos");
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION
+      ]);
+      console.log("GRANTED?: ", granted);
+      if (Object.keys(granted).every(key => granted[key] == "granted")) {
+        console.log("loading: ", this.state.loading);
+        this.setState({ loading: false });
+        console.log("loading: ", this.state.loading);
       }
     } catch (err) {
       console.warn("err:", err);
     }
   }
 
-  // Get the ID of user from Android internal database
+  // Get Permissions and the ID of user from Android internal database
   componentDidMount() {
+    this.requestPermissions();
     AsyncStorage.getItem("userid").then(value => {
       this.setState({
         userid: value
@@ -121,16 +107,14 @@ export class ControlSiteScreen extends React.Component {
         employeeId: this.state.userid,
         serviceShiftId: id
       };
-      console.log("VARIABLES!: ", variables);
       attendance({ variables: variables }).then(data => {
-        console.log("DATAAAAAA: ", data);
         AsyncStorage.multiSet([
           ["shiftid", id],
           ["branch", branch],
           ["begindate", begindate],
           ["workspan", workspan]
         ]);
-        this.props.navigation.navigate("EmployeeTab", {
+        this.props.navigation.navigate("Service", {
           branch: branch,
           begindate: begindate,
           workspan: workspan
@@ -143,36 +127,37 @@ export class ControlSiteScreen extends React.Component {
 
   render() {
     const { loading, error } = this.props.data;
-    if (loading)
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator size="large" color={COLOR_BASE} />
-        </View>
-      );
+    if (loading || this.state.loading)
+      return <ActivityIndicator size="large" color={COLOR_BASE} />;
     else {
       const { begindate, workspan, branch } = this.props.data.serviceShifts[0];
       return (
         <View style={styles.container}>
           <ScrollView>
-            <View style={styles.block}>
-              <View>
-                <Text style={styles.title}>Sede:</Text>
-              </View>
-              <View>
-                <Text style={styles.content}> {branch.branch} </Text>
-              </View>
-              <View>
-                <Text style={styles.title}>Turno:</Text>
-              </View>
-              <View>
-                <Text style={styles.content}>
-                  {moment(begindate).format("HH:mm")} -{" "}
-                  {moment(workspan).format("HH:mm")}
-                </Text>
-              </View>
-            </View>
+            <Card>
+              {/* <Icon
+                type="font-awesome"
+                containerStyle={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0
+                }}
+                name="comment"
+                size={20}
+                color={COLOR_PRIMARY}
+                // reverse={true}
+                reverseColor={COLOR_BASE}
+                raised={true}
+              /> */}
+              <Text h4>{branch.branch}</Text>
+              <Text h4>
+                {moment(begindate).format("h:mm a") +
+                  " - " +
+                  moment(workspan).format("h:mm a")}
+              </Text>
+            </Card>
             <ControlCamera setPhoto={photo => this.setPhoto(photo)} />
-            <View style={styles.access}>
+            <Card>
               <ControlPosition
                 setCoords={(lat, long) => this.setCoords(lat, long)}
                 latitude={branch.latitude}
@@ -181,17 +166,16 @@ export class ControlSiteScreen extends React.Component {
               <Mutation mutation={ATTENDANCE}>
                 {attendance => {
                   return (
-                    <CustomButton
+                    <Button
                       title="Iniciar Turno"
-                      onClick={() => {
+                      onPress={() => {
                         this.handleButtonClick(attendance);
                       }}
-                      size="Normal"
                     />
                   );
                 }}
               </Mutation>
-            </View>
+            </Card>
           </ScrollView>
         </View>
       );

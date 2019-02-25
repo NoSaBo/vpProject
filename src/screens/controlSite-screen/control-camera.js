@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  Text,
   View,
   TextInput,
   ScrollView,
@@ -9,6 +8,7 @@ import {
   Alert,
   PermissionsAndroid
 } from "react-native";
+import { Card, Button, Text, ListItem } from "react-native-elements";
 import ImagePicker from "react-native-image-picker";
 
 import styles from "./styles";
@@ -78,11 +78,7 @@ export class ControlCamera extends React.Component {
           }
           resizeMode="contain"
         />
-        <CustomButton
-          title="Capturar foto"
-          onClick={this.pickImageHandler}
-          size="Normal"
-        />
+        <Button title="Capturar foto" onPress={this.pickImageHandler} />
       </View>
     );
   }

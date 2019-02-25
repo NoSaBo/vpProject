@@ -4,16 +4,28 @@ import {
   AsyncStorage,
   View,
   ScrollView,
-  Text,
   ActivityIndicator
 } from "react-native";
+import {
+  Card,
+  Button,
+  Input,
+  Icon,
+  Text,
+  ListItem
+} from "react-native-elements";
 import { graphql } from "react-apollo";
 import { Query } from "react-apollo";
 import { gql } from "apollo-boost";
 import CustomButton from "./../../components/button";
 import AccordionList from "./../../components/accordion-list";
 import styles from "./styles";
-import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
+import {
+  COLOR_ALERT,
+  COLOR_SECONDARY,
+  COLOR_BASE,
+  COLOR_PRIMARY
+} from "./../../common";
 
 export class HomeScreen extends React.Component {
   constructor(props) {
@@ -38,7 +50,7 @@ export class HomeScreen extends React.Component {
     AsyncStorage.multiGet(["shiftid", "branch", "begindate", "workspan"]).then(
       value => {
         if (value[0][1]) {
-          this.props.navigation.navigate("EmployeeTab", {
+          this.props.navigation.navigate("Service", {
             branch: value[1][1],
             begindate: value[2][1],
             workspan: value[3][1]
@@ -49,70 +61,81 @@ export class HomeScreen extends React.Component {
   }
 
   render() {
-    const { loading, employees } = this.props.data;
-    if (loading) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator size="large" color={COLOR_BASE} />
-        </View>
-      );
-    }
-    if (!employees) {
-      return (
-        <View style={styles.container}>
-          <Text style={styles.welcome}> Error de inicio de sesión </Text>
-          <CustomButton
-            title="Volver"
-            onClick={this.handleLogout}
-            size="Small"
-          />
-        </View>
-      );
-    } else {
-      const { firstname, lastname } = employees[0];
-      const user = this.props.navigation.state.params.user;
-      const sections = employees[0].shifts;
-      // const sections = this.props.data.employees[0].shifts.map(shift => {
-      //   shift.begindate = new Date(shift.begindate);
-      //   shift.workspan = new Date(shift.workspan);
-      // });
-      // sections.sort(function(a, b) {
-      //   return a.begindate.getTime() - b.begindate.getTime();
-      // });
-      return (
-        <View style={styles.container}>
-          <ScrollView>
-            <View style={styles.user}>
-              <View>
-                <Text style={styles.welcome}>Bienvenido</Text>
-                <Text style={styles.welcome}>
-                  {firstname} {lastname}
-                </Text>
-              </View>
-              <View>
-                <CustomButton
-                  title="Cerrar Sesión"
-                  onClick={this.handleLogout}
-                  size="Small"
+    const user = this.props.navigation.state.params.user;
+    return (
+      <View style={styles.container}>
+        <ScrollView>
+          <Card>
+            <Text>Bienvenido</Text>
+            <Text h4>{this.props.navigation.state.params.name}</Text>
+            <Button
+              title="Cerrar Sessión"
+              icon={
+                <Icon
+                  type="font-awesome"
+                  name="sign-out"
+                  size={15}
+                  color="white"
                 />
-              </View>
-            </View>
-            <View style={styles.list}>
-              <AccordionList sections={sections} user={user} />
-            </View>
-          </ScrollView>
-        </View>
-      );
-    }
+              }
+              onPress={this.handleLogout}
+            />
+          </Card>
+          <Card
+            wrapperStyle={{
+              justifyContent: "space-around",
+              alignItems: "stretch"
+            }}
+          >
+            <Text h4 style={{ textAlign: "center" }}>
+              Tus Turnos Activos
+            </Text>
+            <Query
+              query={HOME_QUERY}
+              variables={{ user }}
+              pollInterval={10000}
+              options={{ fetchPolicy: "cache-and-network" }}
+            >
+              {({ loading, error, data, refetch, networkStatus }) => {
+                if (loading || networkStatus === 4)
+                  return (
+                    <ActivityIndicator size="large" color={COLOR_PRIMARY} />
+                  );
+                if (error) return <Text> Error: {error} </Text>;
+                const { employees } = data;
+                const sections = employees[0].shifts;
+                sections.sort((a, b) => {
+                  if (a.begindate < b.begindate) return 1;
+                  if (a.begindate > b.begindate) return -1;
+                  return 0;
+                });
+                return (
+                  <View>
+                    <AccordionList
+                      sections={sections.filter(section => section.active)}
+                      user={user}
+                    />
+                    <Text h4 style={{ textAlign: "center" }}>
+                      Tus Turnos Antiguos
+                    </Text>
+                    <AccordionList
+                      sections={sections.filter(section => !section.active)}
+                      user={user}
+                    />
+                  </View>
+                );
+              }}
+            </Query>
+          </Card>
+        </ScrollView>
+      </View>
+    );
   }
 }
 
 const HOME_QUERY = gql`
   query employees($user: String!) {
     employees(user: $user) {
-      id
-      firstname
-      lastname
       shifts {
         id
         begindate
@@ -127,9 +150,4 @@ const HOME_QUERY = gql`
   }
 `;
 
-export default graphql(HOME_QUERY, {
-  options: props => ({
-    variables: { user: props.navigation.state.params.user },
-    fetchPolicy: "cache-and-network"
-  })
-})(HomeScreen);
+export default HomeScreen;

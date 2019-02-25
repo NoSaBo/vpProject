@@ -1,5 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
+import {
+  Card,
+  Button,
+  Input,
+  Icon,
+  Text,
+  ListItem
+} from "react-native-elements";
 import Accordion from "react-native-collapsible/Accordion";
 
 import AccordionHeader from "./../accordion-header";
@@ -27,17 +35,14 @@ export default class AccordionList extends React.Component {
   }
 
   render() {
+    if (!this.props.sections[0])
+      return <ListItem subtitle="No tienes turnos asignados" />;
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Tus Turnos</Text>
-        <View>
-          <Accordion
-            sections={this.props.sections}
-            renderHeader={this._renderHeader}
-            renderContent={this._renderContent}
-          />
-        </View>
-      </View>
+      <Accordion
+        sections={this.props.sections}
+        renderHeader={this._renderHeader}
+        renderContent={this._renderContent}
+      />
     );
   }
 }

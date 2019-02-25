@@ -53,18 +53,12 @@ export default StyleSheet.create({
   green: {
     fontSize: 18,
     color: "green",
-    fontWeight: "400",
-    fontFamily: FONT_NORMAL,
-    padding: 5,
-    marginTop: 25
+    margin: 10
   },
   red: {
     fontSize: 18,
     color: "red",
-    fontWeight: "400",
-    fontFamily: FONT_NORMAL,
-    padding: 5,
-    marginTop: 25
+    margin: 10
   },
   image: {
     width: 200,

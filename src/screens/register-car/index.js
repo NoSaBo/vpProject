@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   Modal,
-  Text,
   View,
   ScrollView,
   Image,
@@ -11,7 +10,15 @@ import {
   Alert,
   PermissionsAndroid
 } from "react-native";
-import { Overlay, CheckBox, Input, Button, Icon } from "react-native-elements";
+import {
+  Overlay,
+  Card,
+  CheckBox,
+  Input,
+  Button,
+  Icon,
+  Text
+} from "react-native-elements";
 
 import { Mutation, graphql } from "react-apollo";
 import gql from "graphql-tag";
@@ -21,8 +28,6 @@ import Orientation from "react-native-orientation";
 import styles from "./styles";
 import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
 
-// import Input from "./../../components/input";
-import CustomButton from "./../../components/button";
 import Signature from "./../../components/signature-canvas";
 
 export class RegisterScreen extends React.Component {
@@ -65,11 +70,17 @@ export class RegisterScreen extends React.Component {
   };
 
   handleButtonClick = () => {
-    this.props.navigation.navigate("ServiceTab");
+    this.props.navigation.navigate("Service");
   };
 
   setModalSignVisible(visible) {
     this.setState({ modalSign: visible });
+    if (visible) {
+      Orientation.lockToLandscape();
+    } else {
+      Orientation.lockToPortrait();
+      Orientation.unlockAllOrientations();
+    }
   }
 
   setModalReportVisible(visible) {
@@ -104,163 +115,192 @@ export class RegisterScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <ScrollView>
-          <View style={styles.block}>
-            <Input
-              placeholder={"Placa*"}
-              leftIcon={{ type: "font-awesome", name: "car" }}
-              onChangeText={this.handlePlate}
-              autoCapitalize="characters"
-            />
-            <Input
-              placeholder={"Propietario"}
-              leftIcon={{ type: "font-awesome", name: "user" }}
-              onChangeText={this.handleOwner}
-            />
-            <Input
-              placeholder={"Token*"}
-              leftIcon={{ type: "font-awesome", name: "key" }}
-              onChangeText={this.handleToken}
-              autoCapitalize="none"
-            />
-            <Button
-              title="Objetos de valor"
-              icon={<Icon name="add-circle-outline" size={15} />}
-              type="clear"
-              onPress={() => this.setModalValuesVisible(true)}
-            />
+      <ScrollView>
+        <Card>
+          <Input
+            placeholder={"Placa*"}
+            leftIcon={{
+              type: "font-awesome",
+              name: "car",
+              size: 15,
+              color: "gray"
+            }}
+            onChangeText={this.handlePlate}
+            autoCapitalize="characters"
+          />
+          <Input
+            placeholder={"Propietario"}
+            leftIcon={{
+              type: "font-awesome",
+              name: "user",
+              size: 15,
+              color: "gray"
+            }}
+            onChangeText={this.handleOwner}
+          />
+          <Input
+            placeholder={"Token*"}
+            leftIcon={{
+              type: "font-awesome",
+              name: "key",
+              size: 15,
+              color: "gray"
+            }}
+            onChangeText={this.handleToken}
+            autoCapitalize="none"
+          />
+          <Button
+            title="Añadir objetos de valor"
+            icon={<Icon name="add-circle-outline" size={15} color="gray" />}
+            buttonStyle={{ backgroundColor: "white" }}
+            titleStyle={{ fontSize: 15, color: "gray" }}
+            type="outline"
+            raised
+            onPress={() => this.setModalValuesVisible(true)}
+          />
 
-            <Overlay
-              isVisible={this.state.modalValues}
-              onBackdropPress={() => {
-                this.setModalValuesVisible(false);
-              }}
-            >
-              <View>
-                {this.state.values.map((value, index) => {
-                  return (
-                    <CheckBox
-                      key={value.type}
-                      center
-                      title={value.type}
-                      checked={value.selected}
-                      onPress={() => this.ValueChange(index)}
-                    />
-                  );
-                })}
-                <Input
-                  multiline={true}
-                  editable={true}
-                  maxLength={60}
-                  placeholder="Comentarios..."
-                  onChangeText={this.handleComments}
-                  value={this.state.comments}
-                  shake={true}
-                />
-              </View>
-            </Overlay>
-
-            <TouchableHighlight
-              style={styles.block}
-              onPress={() => this.setModalReportVisible(true)}
-            >
-              <View>
-                <ImageBackground
-                  resizeMode={"contain"}
-                  imageStyle={{ width: 300, height: 200 }}
-                  style={{ width: 300, height: 200 }}
-                  source={require("./../../images/car.jpg")}
-                >
-                  <Image
-                    resizeMode={"contain"}
-                    style={{ flex: 1 }}
-                    source={{ uri: this.state.damage }}
-                  />
-                </ImageBackground>
-              </View>
-            </TouchableHighlight>
-
-            <Modal
-              animationType="slide"
-              supportedOrientations={["landscape"]}
-              transparent={true}
-              visible={this.state.modalReport}
-              onRequestClose={() => {
-                this.setModalReportVisible(false);
-              }}
-            >
-              <Signature handle={this.handleDamage} signature={false} />
-            </Modal>
-
-            <TouchableHighlight
-              style={styles.block}
-              onPress={() => this.setModalSignVisible(true)}
-            >
-              <View>
-                <ImageBackground
-                  resizeMode={"contain"}
-                  imageStyle={{
-                    width: 300,
-                    height: 200
-                  }}
-                  style={{ width: 300, height: 200, backgroundColor: "white" }}
-                >
-                  <Image
-                    resizeMode={"contain"}
-                    style={{ flex: 1 }}
-                    source={{ uri: this.state.signature }}
-                  />
-                </ImageBackground>
-              </View>
-            </TouchableHighlight>
-
-            <Modal
-              animationType="slide"
-              supportedOrientations={["landscape"]}
-              transparent={true}
-              visible={this.state.modalSign}
-              onRequestClose={() => {
-                this.setModalSignVisible(false);
-              }}
-            >
-              <Signature handle={this.handleSignature} signature={true} />
-            </Modal>
-
-            <Mutation mutation={NEW_PARKING}>
-              {addParking => {
-                let newValues = [];
-                this.state.values.map(value => {
-                  if (value.selected) newValues.push(value.type);
-                });
-                const parking = {
-                  plate: this.state.plate,
-                  owner: this.state.owner,
-                  values: newValues,
-                  comment: this.state.comments,
-                  damage: this.state.damageUrl,
-                  sign: this.state.signUrl,
-                  token: this.state.token,
-                  serviceshiftId: this.props.navigation.state.params.shiftid
-                };
+          <Overlay
+            isVisible={this.state.modalValues}
+            overlayBackgroundColor={"white"}
+            onBackdropPress={() => {
+              this.setModalValuesVisible(false);
+            }}
+          >
+            <View style={{ paddingTop: 65 }}>
+              <Icon
+                name="close"
+                raised={true}
+                size={15}
+                containerStyle={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0
+                }}
+                onPress={() => {
+                  this.setModalValuesVisible(false);
+                }}
+              />
+              {this.state.values.map((value, index) => {
                 return (
-                  <Button
-                    title="Entregar Vehículo"
-                    icon={<Icon name="check" size={15} />}
-                    onPress={() => {
-                      addParking({
-                        variables: parking
-                      }).then(() =>
-                        this.props.navigation.navigate("ServiceTab")
-                      );
-                    }}
+                  <CheckBox
+                    key={value.type}
+                    center
+                    title={value.type}
+                    checked={value.selected}
+                    onPress={() => this.ValueChange(index)}
                   />
                 );
-              }}
-            </Mutation>
-          </View>
-        </ScrollView>
-      </View>
+              })}
+              <Input
+                multiline={true}
+                editable={true}
+                maxLength={60}
+                placeholder="Comentarios..."
+                onChangeText={this.handleComments}
+                value={this.state.comments}
+                shake={true}
+              />
+            </View>
+          </Overlay>
+
+          <TouchableHighlight
+            style={styles.block}
+            onPress={() => this.setModalReportVisible(true)}
+          >
+            <View>
+              <ImageBackground
+                resizeMode={"contain"}
+                imageStyle={{ width: 300, height: 200 }}
+                style={{ width: 300, height: 200 }}
+                source={require("./../../images/car.jpg")}
+              >
+                <Image
+                  resizeMode={"contain"}
+                  style={{ flex: 1 }}
+                  source={{ uri: this.state.damage }}
+                />
+              </ImageBackground>
+            </View>
+          </TouchableHighlight>
+
+          <Modal
+            animationType="slide"
+            supportedOrientations={["landscape"]}
+            transparent={true}
+            visible={this.state.modalReport}
+            onRequestClose={() => {
+              this.setModalReportVisible(false);
+            }}
+          >
+            <Signature handle={this.handleDamage} signature={false} />
+          </Modal>
+
+          <TouchableHighlight
+            style={styles.block}
+            onPress={() => this.setModalSignVisible(true)}
+          >
+            <View>
+              <ImageBackground
+                resizeMode={"contain"}
+                imageStyle={{
+                  width: 300,
+                  height: 200
+                }}
+                style={{ width: 300, height: 200, backgroundColor: "white" }}
+              >
+                <Image
+                  resizeMode={"contain"}
+                  style={{ flex: 1 }}
+                  source={{ uri: this.state.signature }}
+                />
+              </ImageBackground>
+            </View>
+          </TouchableHighlight>
+
+          <Modal
+            animationType="slide"
+            supportedOrientations={["landscape"]}
+            transparent={true}
+            visible={this.state.modalSign}
+            onRequestClose={() => {
+              this.setModalSignVisible(false);
+            }}
+          >
+            <Signature handle={this.handleSignature} signature={true} />
+          </Modal>
+
+          <Mutation mutation={NEW_PARKING}>
+            {addParking => {
+              let newValues = [];
+              this.state.values.map(value => {
+                if (value.selected) newValues.push(value.type);
+              });
+              const parking = {
+                plate: this.state.plate,
+                owner: this.state.owner,
+                values: newValues,
+                comment: this.state.comments,
+                damage: this.state.damageUrl,
+                sign: this.state.signUrl,
+                token: this.state.token,
+                serviceshiftId: this.props.navigation.state.params.shiftid,
+                employeeId: this.props.navigation.state.params.userid
+              };
+              return (
+                <Button
+                  title="Parkear"
+                  icon={<Icon name="check" size={15} color="white" />}
+                  onPress={() => {
+                    addParking({
+                      variables: parking
+                    }).then(() => this.props.navigation.navigate("Service"));
+                  }}
+                />
+              );
+            }}
+          </Mutation>
+        </Card>
+      </ScrollView>
     );
   }
 }
@@ -275,6 +315,7 @@ export const NEW_PARKING = gql`
     $sign: String!
     $token: String!
     $serviceshiftId: ID!
+    $employeeId: ID!
   ) {
     addParking(
       plate: $plate
@@ -285,6 +326,7 @@ export const NEW_PARKING = gql`
       sign: $sign
       token: $token
       serviceshiftId: $serviceshiftId
+      employeeId: $employeeId
     ) {
       id
     }

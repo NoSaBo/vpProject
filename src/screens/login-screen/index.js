@@ -1,31 +1,19 @@
 import React from "react";
 import {
   AsyncStorage,
+  ActivityIndicator,
   StyleSheet,
   Text,
   View,
   Image,
   Alert
 } from "react-native";
-import { createSwitchNavigator } from "react-navigation";
-import { gql } from "apollo-boost";
-import { graphql } from "react-apollo";
-import { ApolloConsumer } from "react-apollo";
+import { Button, Input, Icon } from "react-native-elements";
+import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
 
-import Input from "./../../components/input";
-import CustomButton from "./../../components/button";
 import styles from "./styles";
-
-const LOG_USER = gql`
-  query login($user: String!, $password: String!) {
-    login(user: $user, password: $password) {
-      id
-      user
-      firstname
-      lastname
-    }
-  }
-`;
+import { COLOR_ALERT, COLOR_SECONDARY, COLOR_BASE } from "./../../common";
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
@@ -44,11 +32,49 @@ export default class LoginScreen extends React.Component {
     this.setState({ password: text });
   };
 
+  handleInput = (login, error) => {
+    if (!this.state.user) {
+      Alert.alert(
+        "Error de inicio de sesión",
+        "Debe ingresar un nombre de usuario"
+      );
+      return;
+    } else
+      login({
+        variables: {
+          user: this.state.user,
+          password: this.state.password
+        }
+      }).then(value => {
+        const { data } = value;
+        if (error) console.log("mutation error: ", error);
+        if (!data.login)
+          Alert.alert(
+            "Error de inicio de sesión",
+            "El usuario y/o contraseña es inválido"
+          );
+        else {
+          const { id, user, firstname, lastname } = data.login;
+          const name = firstname + " " + lastname;
+          AsyncStorage.multiSet([
+            ["userid", id],
+            ["user", user],
+            ["name", name]
+          ]);
+          this.props.navigation.navigate("Home", {
+            user: data.login.user,
+            name: name
+          });
+        }
+      });
+  };
+
   componentWillMount() {
-    AsyncStorage.getItem("user").then(value => {
-      if (value) {
+    AsyncStorage.multiGet(["user", "name"]).then(value => {
+      if (value[0][1]) {
         this.props.navigation.navigate("Home", {
-          user: value
+          user: value[0][1],
+          name: value[1][1]
         });
       }
     });
@@ -56,68 +82,59 @@ export default class LoginScreen extends React.Component {
 
   render() {
     return (
-      <ApolloConsumer>
-        {client => (
-          <View style={styles.container}>
-            <Image
-              style={styles.image}
-              source={require("./../../images/parkeo.png")}
-            />
-            <Input
-              placeholder={"Usuario"}
-              handleInput={this.handleUser}
-              secure={false}
-              capitalize={false}
-            />
-            <Input
-              placeholder={"Contraseña"}
-              handleInput={this.handlePassword}
-              secure={true}
-              capitalize={false}
-            />
-            <CustomButton
-              title="Iniciar"
-              onClick={async () => {
-                if (!this.state.user) {
-                  Alert.alert(
-                    "Error de inicio de sesión",
-                    "Debe ingresar un nombre de usuario"
-                  );
-                } else {
-                  const { data } = await client.query({
-                    query: LOG_USER,
-                    variables: {
-                      user: this.state.user,
-                      password: this.state.password
-                    },
-                    fetchPolicy: "no-cache"
-                  });
-                  if (!data.login) {
-                    Alert.alert(
-                      "Error de inicio de sesión",
-                      "El usuario y/o contraseña es inválido"
-                    );
-                  } else {
-                    const { id, user, firstname, lastname } = data.login;
-                    AsyncStorage.multiSet([["userid", id], ["user", user]]);
-                    client.writeData({
-                      data: {
-                        user: user,
-                        firstname: firstname,
-                        lastname: lastname
-                      }
-                    });
-                    this.props.navigation.navigate("Home", {
-                      user: data.login.user
-                    });
-                  }
+      <View style={styles.container}>
+        <Image
+          style={styles.image}
+          source={require("./../../images/parkeo.png")}
+        />
+        <Input
+          placeholder={"Usuario"}
+          leftIcon={{
+            type: "font-awesome",
+            name: "user",
+            color: "gray"
+          }}
+          onChangeText={this.handleUser}
+          autoCapitalize="none"
+        />
+        <Input
+          placeholder={"Contraseña"}
+          leftIcon={{ type: "font-awesome", name: "lock", color: "gray" }}
+          onChangeText={this.handlePassword}
+          secureTextEntry
+          autoCapitalize="none"
+        />
+        <Mutation mutation={LOG_USER}>
+          {(login, { loading, error }) => {
+            return (
+              <Button
+                title="Entrar"
+                loading={loading}
+                icon={
+                  <Icon
+                    type="font-awesome"
+                    name="sign-in"
+                    size={15}
+                    color="white"
+                  />
                 }
-              }}
-              size="Normal"
-            />
-          </View>
-        )}
-      </ApolloConsumer>
+                onPress={() => this.handleInput(login, error)}
+              />
+            );
+          }}
+        </Mutation>
+      </View>
     );
   }
 }
+
+const LOG_USER = gql`
+  mutation login($user: String!, $password: String!) {
+    login(user: $user, password: $password) {
+      id
+      user
+      firstname
+      lastname
+    }
+  }
+`;

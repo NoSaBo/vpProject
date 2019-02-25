@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Text, View, Alert, PermissionsAndroid } from "react-native";
+import { View, Alert, PermissionsAndroid } from "react-native";
+import { Card, Icon, Text } from "react-native-elements";
 import geolib from "geolib";
 
 import styles from "./styles";

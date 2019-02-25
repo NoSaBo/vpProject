@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { Card, Button, Input, Icon, Text } from "react-native-elements";
 
 import CustomButton from "./../../components/button";
 import moment from "moment";
@@ -18,24 +19,24 @@ class accordionContent extends React.Component {
 
   render() {
     const { address, begindate, workspan, active } = this.props;
+    const button = active ? (
+      <Button
+        title="Iniciar turno"
+        icon={
+          <Icon type="font-awesome" name="sign-in" size={15} color="white" />
+        }
+        onPress={this.handleService}
+      />
+    ) : null;
     return (
-      <View style={styles.container}>
-        <View>
-          <Text style={styles.text}> {address} </Text>
-        </View>
-        <View>
-          <Text style={styles.text}>
-            {moment(begindate).format("HH:mm")} -{" "}
-            {moment(workspan).format("HH:mm")}
-          </Text>
-        </View>
-        <View>
-          <CustomButton
-            title="Iniciar turno"
-            onClick={this.handleService}
-            size="Small"
-          />
-        </View>
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <Text>{address}</Text>
+        <Text style={{ fontSize: 18 }}>
+          {moment(begindate).format("h:mm a") +
+            " - " +
+            moment(workspan).format("h:mm a")}
+        </Text>
+        {button}
       </View>
     );
   }
